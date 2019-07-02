@@ -26,6 +26,8 @@
  * Copyright (c) 2009 by William Greiman
  */
 
+#include "../../sd/cardreader.h"
+
 /**
  * Adapted to the STM32F1 HAL
  */
@@ -43,6 +45,8 @@
 // --------------------------------------------------------------------------
 // Public Variables
 // --------------------------------------------------------------------------
+
+static SPISettings spiConfig;      // geo-f
 
 // --------------------------------------------------------------------------
 // Public functions
@@ -98,6 +102,9 @@ void spiInit(uint8_t spiRate) {
     case SPI_SPEED_6:       clock = SPI_CLOCK_DIV64; break;
     default:                clock = SPI_CLOCK_DIV2; // Default from the SPI library
   }
+  
+  spiConfig = SPISettings(clock, MSBFIRST, SPI_MODE0);
+  
   SPI.setModule(SPI_DEVICE);
   SPI.begin();
   SPI.setClockDivider(clock);
@@ -113,7 +120,16 @@ void spiInit(uint8_t spiRate) {
  * @details
  */
 uint8_t spiRec(void) {
-  uint8_t returnByte = SPI.transfer(0xFF);
+  uint8_t returnByte;  
+  if(card.isFileOpen()) {
+    SPI.beginTransaction(spiConfig);
+    returnByte = SPI.transfer(0xFF);
+    SPI.endTransaction();
+  }
+  else {
+    returnByte = SPI.transfer(0xFF);
+  }
+  
   return returnByte;
 }
 
@@ -126,8 +142,15 @@ uint8_t spiRec(void) {
  *
  * @details Uses DMA
  */
-void spiRead(uint8_t* buf, uint16_t nbyte) {
-  SPI.dmaTransfer(0, const_cast<uint8_t*>(buf), nbyte);
+void spiRead(uint8_t* buf, uint16_t nbyte) {  
+  if(card.isFileOpen()) {
+    SPI.beginTransaction(spiConfig);
+    SPI.dmaTransfer(0, const_cast<uint8_t*>(buf), nbyte);
+    SPI.endTransaction();
+  }
+  else {
+    SPI.dmaTransfer(0, const_cast<uint8_t*>(buf), nbyte);
+  }
 }
 
 /**
@@ -137,8 +160,15 @@ void spiRead(uint8_t* buf, uint16_t nbyte) {
  *
  * @details
  */
-void spiSend(uint8_t b) {
-  SPI.send(b);
+void spiSend(uint8_t b) {  
+  if(card.isFileOpen()) {
+    SPI.beginTransaction(spiConfig);
+    SPI.send(b);
+    SPI.endTransaction();
+  }
+  else {
+    SPI.send(b);
+  }
 }
 
 /**
@@ -149,9 +179,17 @@ void spiSend(uint8_t b) {
  *
  * @details Use DMA
  */
-void spiSendBlock(uint8_t token, const uint8_t* buf) {
-  SPI.send(token);
-  SPI.dmaSend(const_cast<uint8_t*>(buf), 512);
+void spiSendBlock(uint8_t token, const uint8_t* buf) {  
+  if(card.isFileOpen()) {
+    SPI.beginTransaction(spiConfig);
+    SPI.send(token);
+    SPI.dmaSend(const_cast<uint8_t*>(buf), 512);
+    SPI.endTransaction();
+  }
+  else {
+    SPI.send(token);
+    SPI.dmaSend(const_cast<uint8_t*>(buf), 512);
+  }
 }
 
 #if ENABLED(SPI_EEPROM)

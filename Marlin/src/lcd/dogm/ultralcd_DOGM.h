@@ -39,10 +39,21 @@
   #endif
 
 #elif ENABLED(U8GLIB_ST7920)
+  #if MOTHERBOARD == BOARD_FYSETC_CHEETAH
+    #define FORCE_SOFT_SPI
+  #endif
   // RepRap Discount Full Graphics Smart Controller
-  #if DISABLED(SDSUPPORT) && (LCD_PINS_D4 == SCK_PIN) && (LCD_PINS_ENABLE == MOSI_PIN)
-    #define U8G_CLASS U8GLIB_ST7920_128X64_4X_HAL
-    #define U8G_PARAM LCD_PINS_RS // 2 stripes, HW SPI (shared with SD card, on AVR does not use standard LCD adapter)
+  #if DISABLED(SDSUPPORT) && (LCD_PINS_D4 == SCK_PIN) && (LCD_PINS_ENABLE == MOSI_PIN) && DISABLED(FORCE_SOFT_SPI)
+  //#if (LCD_PINS_D4 == SCK_PIN) && (LCD_PINS_ENABLE == MOSI_PIN) // geo-f
+    //#define U8G_CLASS U8GLIB_ST7920_128X64_4X_HAL
+    //#define U8G_PARAM LCD_PINS_RS // 2 stripes, HW SPI (shared with SD card, on AVR does not use standard LCD adapter)
+
+    #define U8G_CLASS U8GLIB_ST7920_128X64_STM32F103_HAL
+    #define U8G_PARAM LCD_PINS_RS
+    //#define U8G_PARAM LCD_PINS_D4, LCD_PINS_ENABLE, LCD_PINS_RS     // geo-f : change to SOFT SPI
+
+    //#define U8G_CLASS U8GLIB_ST7920_128X64_STM32F103_4X_HAL
+    //#define U8G_PARAM LCD_PINS_RS
   #else
     //#define U8G_CLASS U8GLIB_ST7920_128X64_4X
     //#define U8G_PARAM LCD_PINS_D4, LCD_PINS_ENABLE, LCD_PINS_RS     // Original u8glib device. 2 stripes, SW SPI
@@ -115,6 +126,9 @@
   #define U8G_PARAM DOGLCD_CS, DOGLCD_A0                              // 8 stripes
 #elif ENABLED(FYSETC_MINI_12864)
   // The FYSETC_MINI_12864 display
+  #if MOTHERBOARD == BOARD_FYSETC_CHEETAH
+  #define FORCE_SOFT_SPI
+  #endif
   #define U8G_CLASS U8GLIB_MINI12864_2X_HAL
   #if ENABLED(FORCE_SOFT_SPI)
     #define U8G_PARAM DOGLCD_SCK, DOGLCD_MOSI, DOGLCD_CS, DOGLCD_A0   // 4 stripes SW-SPI

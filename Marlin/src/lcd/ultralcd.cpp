@@ -40,6 +40,10 @@
   #endif
 #endif
 
+#if ENABLED(SD_RELOAD_SETTINGS)
+  #include "../module/configuration_store.h"
+#endif
+
 #if HAS_SPI_LCD
   #if ENABLED(STATUS_MESSAGE_SCROLLING)
     uint8_t MarlinUI::status_scroll_offset; // = 0
@@ -782,6 +786,11 @@ void MarlinUI::update() {
 
       if (sd_status) {
         safe_delay(500); // Some boards need a delay to get settled
+        #if ENABLED(SD_RELOAD_SETTINGS)
+          (void)settings.load();
+          card.initsd();
+          safe_delay(20);
+        #endif
         card.initsd();
         if (old_sd_status == 2)
           card.beginautostart();  // Initial boot

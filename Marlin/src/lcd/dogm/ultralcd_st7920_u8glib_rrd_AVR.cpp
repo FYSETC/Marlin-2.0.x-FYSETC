@@ -42,11 +42,19 @@
 // Optimize this code with -O3
 #pragma GCC optimize (3)
 
-#define ST7920_SND_BIT \
-  WRITE(ST7920_CLK_PIN, LOW);        ST7920_DELAY_1; \
-  WRITE(ST7920_DAT_PIN, val & 0x80); ST7920_DELAY_2; \
-  WRITE(ST7920_CLK_PIN, HIGH);       ST7920_DELAY_3; \
-  val <<= 1
+#ifdef ARDUINO_ARCH_STM32F1
+  #define ST7920_SND_BIT \
+    WRITE(ST7920_CLK_PIN, LOW);                   ST7920_DELAY_1; \
+    WRITE(ST7920_DAT_PIN, (val & 0x80)?HIGH:LOW); ST7920_DELAY_2; \
+    WRITE(ST7920_CLK_PIN, HIGH);                  ST7920_DELAY_3; \
+    val <<= 1
+#else
+  #define ST7920_SND_BIT \
+    WRITE(ST7920_CLK_PIN, LOW);        ST7920_DELAY_1; \
+    WRITE(ST7920_DAT_PIN, val & 0x80); ST7920_DELAY_2; \
+    WRITE(ST7920_CLK_PIN, HIGH);       ST7920_DELAY_3; \
+    val <<= 1
+#endif
 
 // Optimize this code with -O3
 #pragma GCC optimize (3)

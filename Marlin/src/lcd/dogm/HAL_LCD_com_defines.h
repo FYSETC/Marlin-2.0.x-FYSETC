@@ -35,10 +35,14 @@
   #elif defined(__STM32F1__)
     uint8_t u8g_com_HAL_STM32F1_sw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
     #define U8G_COM_HAL_SW_SPI_FN u8g_com_HAL_STM32F1_sw_spi_fn
+    //#define U8G_COM_HAL_SW_SPI_FN u8g_com_std_sw_spi_fn // geo-f : u8g_com_HAL_STM32F1_sw_spi_fn ok ?
     uint8_t u8g_com_arduino_hw_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
-    #define U8G_COM_HAL_HW_SPI_FN u8g_com_arduino_hw_spi_fn
+    //#define U8G_COM_HAL_HW_SPI_FN u8g_com_arduino_hw_spi_fn // geo-f : default
+    #define U8G_COM_HAL_HW_SPI_FN u8g_com_stm32duino_hw_spi_fn // geo-f
     uint8_t u8g_com_arduino_st7920_spi_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
-    #define U8G_COM_ST7920_HAL_SW_SPI u8g_com_arduino_st7920_spi_fn
+    //#define U8G_COM_ST7920_HAL_SW_SPI u8g_com_arduino_st7920_spi_fn // geo-f : default
+    #define U8G_COM_ST7920_HAL_SW_SPI u8g_com_std_sw_spi_fn // geo-f
+    #define U8G_COM_ST7920_HAL_HW_SPI u8g_com_stm32duino_hw_spi_fn // geo-f
   #else
     uint8_t u8g_com_HAL_AVR_sw_sp_fn(u8g_t *u8g, uint8_t msg, uint8_t arg_val, void *arg_ptr);
     #define U8G_COM_HAL_SW_SPI_FN  u8g_com_HAL_AVR_sw_sp_fn // AVR ?

@@ -27,10 +27,12 @@
 #define BOARD_NAME        "FYSETC AIO II"
 #define BOARD_WEBSITE_URL "https://fysetc.com"
 
+#define DISABLE_JTAG
+
 #define pins_v2_20190128   // geo-f:add for new pins define
 
 // Ignore temp readings during develpment.
-#define BOGUS_TEMPERATURE_FAILSAFE_OVERRIDE
+//#define BOGUS_TEMPERATURE_FAILSAFE_OVERRIDE
 
 //
 // Limit Switches

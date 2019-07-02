@@ -51,6 +51,37 @@ public:
     { }
 };
 
+
+// geo-f : 20190613
+extern u8g_dev_t u8g_dev_st7920_128x64_stm32f103_HAL_4x_sw_spi;
+extern u8g_dev_t u8g_dev_st7920_128x64_stm32f103_HAL_4x_hw_spi;
+
+class U8GLIB_ST7920_128X64_STM32F103_4X_HAL : public U8GLIB {
+public:
+  U8GLIB_ST7920_128X64_STM32F103_4X_HAL(pin_t sck, pin_t mosi, pin_t cs, pin_t reset = U8G_PIN_NONE)
+    : U8GLIB(&u8g_dev_st7920_128x64_stm32f103_HAL_4x_sw_spi, (uint8_t)sck, (uint8_t)mosi, (uint8_t)cs, U8G_PIN_NONE, (uint8_t)reset)    // a0 = U8G_PIN_NONE
+    { }
+  U8GLIB_ST7920_128X64_STM32F103_4X_HAL(pin_t cs, pin_t reset = U8G_PIN_NONE)
+    : U8GLIB(&u8g_dev_st7920_128x64_stm32f103_HAL_4x_hw_spi, (uint8_t)cs, U8G_PIN_NONE, (uint8_t)reset)   // a0 = U8G_PIN_NONE
+    { }
+};
+
+
+// geo-f : 20190613
+extern u8g_dev_t u8g_dev_st7920_128x64_stm32f103_HAL_sw_spi;
+extern u8g_dev_t u8g_dev_st7920_128x64_stm32f103_HAL_hw_spi;
+
+class U8GLIB_ST7920_128X64_STM32F103_HAL : public U8GLIB {
+public:
+  U8GLIB_ST7920_128X64_STM32F103_HAL(pin_t sck, pin_t mosi, pin_t cs, pin_t reset = U8G_PIN_NONE)
+    : U8GLIB(&u8g_dev_st7920_128x64_stm32f103_HAL_sw_spi, (uint8_t)sck, (uint8_t)mosi, (uint8_t)cs, U8G_PIN_NONE, (uint8_t)reset)    // a0 = U8G_PIN_NONE
+    { }
+  U8GLIB_ST7920_128X64_STM32F103_HAL(pin_t cs, pin_t reset = U8G_PIN_NONE)
+    : U8GLIB(&u8g_dev_st7920_128x64_stm32f103_HAL_hw_spi, (uint8_t)cs, U8G_PIN_NONE, (uint8_t)reset)   // a0 = U8G_PIN_NONE
+    { }
+};
+
+
 //
 // AVR version uses ultralcd_st7920_u8glib_rrd_AVR.cpp
 // HAL version uses u8g_dev_st7920_128x64_HAL.cpp

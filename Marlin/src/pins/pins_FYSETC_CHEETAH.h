@@ -29,8 +29,10 @@
 #define BOARD_NAME "FYSETC CHEETAH"
 #define BOARD_WEBSITE_URL "https://fysetc.com"
 
+#define DISABLE_JTAG
+
 // Ignore temp readings during develpment.
-#define BOGUS_TEMPERATURE_FAILSAFE_OVERRIDE
+//#define BOGUS_TEMPERATURE_FAILSAFE_OVERRIDE
 
 //
 // Servos
@@ -68,7 +70,7 @@
 #define E0_DIR_PIN         PC14
 #define E0_ENABLE_PIN      PC13
 
-#define X_HARDWARE_SERIAL  MSerial2   // Port correct?
+#define X_HARDWARE_SERIAL  MSerial2
 #define Y_HARDWARE_SERIAL  MSerial2
 #define Z_HARDWARE_SERIAL  MSerial2
 #define E0_HARDWARE_SERIAL MSerial2
@@ -140,3 +142,44 @@
   #endif
 
 #endif
+
+/*
+//#define LCD_RESET_PIN			-1  
+#define LCD_RED_PIN				PB0
+#define LCD_GREEN_PIN			PB7
+#define LCD_BLUE_PIN 			PB6
+
+#define BEEPER_PIN        PC9
+// Pins for DOGM SPI LCD Support
+#define DOGLCD_A0         PB14
+#define DOGLCD_CS         PB12
+
+#define DOGLCD_SCK        PB13
+#define DOGLCD_MOSI       PB15
+
+#define LCD_PINS_RS       PB12  // CS    // SOFT SPI for ENDER3 LCD
+#define LCD_PINS_D4       PB13 // SCLK
+#define LCD_PINS_ENABLE   PB15 // DATA MOSI
+
+//#define LCD_BACKLIGHT_PIN -1   // backlight LED on A11/D65
+#define SDSS              PA4
+
+//#define KILL_PIN          -1
+// GLCD features
+//#define LCD_CONTRAST   190
+// Uncomment screen orientation
+//#define LCD_SCREEN_ROT_90
+//#define LCD_SCREEN_ROT_180
+//#define LCD_SCREEN_ROT_270
+// The encoder and click button
+#define BTN_EN1           PC11
+#define BTN_EN2           PC10
+#define BTN_ENC           PC12
+// not connected to a pin
+#define SD_DETECT_PIN     PC3
+
+#define RGB_LED_R_PIN PB0
+#define RGB_LED_G_PIN PB7
+#define RGB_LED_B_PIN PB6
+
+*/

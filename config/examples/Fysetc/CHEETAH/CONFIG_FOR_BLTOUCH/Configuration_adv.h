@@ -1,9 +1,9 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
- * Copyright (C) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -352,8 +352,11 @@
 #define E4_AUTO_FAN_PIN -1
 #define E5_AUTO_FAN_PIN -1
 #define CHAMBER_AUTO_FAN_PIN -1
+
 #define EXTRUDER_AUTO_FAN_TEMPERATURE 50
 #define EXTRUDER_AUTO_FAN_SPEED 255   // 255 == full speed
+#define CHAMBER_AUTO_FAN_TEMPERATURE 30
+#define CHAMBER_AUTO_FAN_SPEED 255
 
 /**
  * Part-Cooling Fan Multiplexer
@@ -464,20 +467,20 @@
  * The inactive carriage is parked automatically to prevent oozing.
  * X1 is the left carriage, X2 the right. They park and home at opposite ends of the X axis.
  * By default the X2 stepper is assigned to the first unused E plug on the board.
- * 
+ *
  * The following Dual X Carriage modes can be selected with M605 S<mode>:
- * 
+ *
  *   0 : (FULL_CONTROL) The slicer has full control over both X-carriages and can achieve optimal travel
  *       results as long as it supports dual X-carriages. (M605 S0)
- * 
+ *
  *   1 : (AUTO_PARK) The firmware automatically parks and unparks the X-carriages on tool-change so
  *       that additional slicer support is not required. (M605 S1)
- * 
+ *
  *   2 : (DUPLICATION) The firmware moves the second X-carriage and extruder in synchronization with
  *       the first X-carriage and extruder, to print 2 copies of the same object at the same time.
  *       Set the constant X-offset and temperature differential with M605 S2 X[offs] R[deg] and
  *       follow with M605 S2 to initiate duplicated movement.
- * 
+ *
  *   3 : (MIRRORED) Formbot/Vivedino-inspired mirrored mode in which the second extruder duplicates
  *       the movement of the first except the second extruder is reversed in the X axis.
  *       Set the initial X offset and temperature differential with M605 S2 X[offs] R[deg] and
@@ -604,8 +607,10 @@
   #define Z_STEPPER_ALIGN_ITERATIONS 3
   // Enable to restore leveling setup after operation
   #define RESTORE_LEVELING_AFTER_G34
+
   // On a 300mm bed a 5% grade would give a misalignment of ~1.5cm
   #define G34_MAX_GRADE  5  // (%) Maximum incline G34 will handle
+
   // Use the amplification factor to de-/increase correction step.
   // In case the stepper (spindle) position is further out than the test point
   // Use a value > 1. NOTE: This may cause instability
@@ -616,7 +621,7 @@
 
 // @section machine
 
-#define AXIS_RELATIVE_MODES {false, false, false, false}
+#define AXIS_RELATIVE_MODES { false, false, false, false }
 
 // Add a Duplicate option for well-separated conjoined nozzles
 //#define MULTI_NOZZLE_DUPLICATION
@@ -633,7 +638,7 @@
 #define DEFAULT_STEPPER_DEACTIVE_TIME 120
 #define DISABLE_INACTIVE_X true
 #define DISABLE_INACTIVE_Y true
-#define DISABLE_INACTIVE_Z true  // set to false if the nozzle will fall down on your printed part when print has finished.
+#define DISABLE_INACTIVE_Z true  // Set to false if the nozzle will fall down on your printed part when print has finished.
 #define DISABLE_INACTIVE_E true
 
 #define DEFAULT_MINIMUMFEEDRATE       0.0     // minimum feedrate
@@ -749,7 +754,7 @@
   // Define pin which is read during calibration
   #ifndef CALIBRATION_PIN
     #define CALIBRATION_PIN -1 // Override in pins.h or set to -1 to use your Z endstop
-    #define CALIBRATION_PIN_INVERTING false // set to true to invert the pin
+    #define CALIBRATION_PIN_INVERTING false // Set to true to invert the pin
     //#define CALIBRATION_PIN_PULLDOWN
     #define CALIBRATION_PIN_PULLUP
   #endif
@@ -919,7 +924,7 @@
    */
   //#define POWER_LOSS_RECOVERY
   #if ENABLED(POWER_LOSS_RECOVERY)
-    //#define POWER_LOSS_PIN         44 // Pin to detect power loss (optional)
+    //#define POWER_LOSS_PIN         44 // Pin to detect power loss
     //#define POWER_LOSS_STATE     HIGH // State of pin indicating power loss
     //#define POWER_LOSS_PURGE_LEN   20 // (mm) Length of filament to purge on resume
     //#define POWER_LOSS_RETRACT_LEN 10 // (mm) Length of filament to retract on fail. Requires backup power.
@@ -1046,6 +1051,12 @@
   #endif
 
 #endif // SDSUPPORT
+
+/**
+ * By default an onboard SD card reader may be shared as a USB mass-
+ * storage device. This option hides the SD card from the host PC.
+ */
+//#define NO_SD_HOST_DRIVE   // Disable SD Card access over USB (for security).
 
 /**
  * Additional options for Graphical Displays
@@ -1199,8 +1210,9 @@
  */
 //#define LIN_ADVANCE
 #if ENABLED(LIN_ADVANCE)
-  #define LIN_ADVANCE_K 0.22  // Unit: mm compression per 1mm/s extruder speed
-  //#define LA_DEBUG          // If enabled, this will generate debug information output over USB.
+  //#define EXTRA_LIN_ADVANCE_K // Enable for second linear advance constants
+  #define LIN_ADVANCE_K 0.22    // Unit: mm compression per 1mm/s extruder speed
+  //#define LA_DEBUG            // If enabled, this will generate debug information output over USB.
 #endif
 
 // @section leveling
@@ -1434,6 +1446,7 @@
 #if EXTRUDERS > 1
   // Z raise distance for tool-change, as needed for some extruders
   #define TOOLCHANGE_ZRAISE     2  // (mm)
+  //#define TOOLCHANGE_NO_RETURN   // Never return to the previous position on tool-change
 
   // Retract and prime filament on tool-change
   //#define TOOLCHANGE_FILAMENT_SWAP
@@ -1719,7 +1732,6 @@
   //#define E5_CS_PIN         -1
 
   /**
-   * Use software SPI for TMC2130.
    * Software option for SPI driven drivers (TMC2130, TMC2160, TMC2660, TMC5130 and TMC5160).
    * The default SW SPI pins are defined the respective pins files,
    * but you can override or define them here.
@@ -1761,7 +1773,7 @@
   //#define SOFTWARE_DRIVER_ENABLE
 
   /**
-   * TMC2130, TMC2160, TMC2208, TMC5130 and TMC5160 only
+   * TMC2130, TMC2160, TMC2208, TMC2209, TMC5130 and TMC5160 only
    * Use Trinamic's ultra quiet stepping mode.
    * When disabled, Marlin will use spreadCycle stepping mode.
    */
@@ -1787,7 +1799,7 @@
 
   /**
    * Monitor Trinamic drivers for error conditions,
-   * like overtemperature and short to ground. TMC2208 requires hardware serial.
+   * like overtemperature and short to ground.
    * In the case of overtemperature Marlin can decrease the driver current until error condition clears.
    * Other detected conditions can be used to stop the current print.
    * Relevant g-codes:
@@ -1805,7 +1817,7 @@
   #endif
 
   /**
-   * TMC2130, TMC2160, TMC2208, TMC5130 and TMC5160 only
+   * TMC2130, TMC2160, TMC2208, TMC2209, TMC5130 and TMC5160 only
    * The driver will switch to spreadCycle when stepper speed is over HYBRID_THRESHOLD.
    * This mode allows for faster movements at the expense of higher noise levels.
    * STEALTHCHOP_(XY|Z|E) must be enabled to use HYBRID_THRESHOLD.
@@ -1828,7 +1840,7 @@
   #define E5_HYBRID_THRESHOLD     30
 
   /**
-   * TMC2130, TMC2160, TMC2660, TMC5130, and TMC5160 only
+   * TMC2130, TMC2160, TMC2209, TMC2660, TMC5130, and TMC5160 only
    * Use StallGuard2 to sense an obstacle and trigger an endstop.
    * Connect the stepper driver's DIAG1 pin to the X/Y endstop pin.
    * X, Y, and Z homing will always be done in spreadCycle mode.
@@ -1840,7 +1852,7 @@
    * It is advised to set X/Y/Z_HOME_BUMP_MM to 0.
    * M914 X/Y/Z to live tune the setting
    */
-  //#define SENSORLESS_HOMING // TMC2130 only
+  //#define SENSORLESS_HOMING // StallGuard capable drivers only
 
   /**
    * Use StallGuard2 to probe the bed with the nozzle.
@@ -1848,9 +1860,10 @@
    * CAUTION: This could cause damage to machines that use a lead screw or threaded rod
    *          to move the Z axis. Take extreme care when attempting to enable this feature.
    */
-  //#define SENSORLESS_PROBING // TMC2130 only
+  //#define SENSORLESS_PROBING // StallGuard capable drivers only
 
   #if EITHER(SENSORLESS_HOMING, SENSORLESS_PROBING)
+    // TMC2209: 0...255. TMC2130: -64...63
     #define X_STALL_SENSITIVITY  8
     #define Y_STALL_SENSITIVITY  8
     //#define Z_STALL_SENSITIVITY  8
@@ -2108,36 +2121,38 @@
  *
  * See http://marlinfw.org/docs/configuration/laser_spindle.html for more config details.
  */
-//#define SPINDLE_LASER_ENABLE
-#if ENABLED(SPINDLE_LASER_ENABLE)
+//#define SPINDLE_FEATURE
+//#define LASER_FEATURE
+#if EITHER(SPINDLE_FEATURE, LASER_FEATURE)
+  #define SPINDLE_LASER_ACTIVE_HIGH     false  // Set to "true" if the on/off function is active HIGH
+  #define SPINDLE_LASER_PWM             true   // Set to "true" if your controller supports setting the speed/power
+  #define SPINDLE_LASER_PWM_INVERT      true   // Set to "true" if the speed/power goes up when you want it to go slower
+  #define SPINDLE_LASER_POWERUP_DELAY   5000   // (ms) Delay to allow the spindle/laser to come up to speed/power
+  #define SPINDLE_LASER_POWERDOWN_DELAY 5000   // (ms) Delay to allow the spindle to stop
 
-  #define SPINDLE_LASER_ENABLE_INVERT   false  // set to "true" if the on/off function is reversed
-  #define SPINDLE_LASER_PWM             true   // set to true if your controller supports setting the speed/power
-  #define SPINDLE_LASER_PWM_INVERT      true   // set to "true" if the speed/power goes up when you want it to go slower
-  #define SPINDLE_LASER_POWERUP_DELAY   5000   // delay in milliseconds to allow the spindle/laser to come up to speed/power
-  #define SPINDLE_LASER_POWERDOWN_DELAY 5000   // delay in milliseconds to allow the spindle to stop
-  #define SPINDLE_DIR_CHANGE            true   // set to true if your spindle controller supports changing spindle direction
-  #define SPINDLE_INVERT_DIR            false
-  #define SPINDLE_STOP_ON_DIR_CHANGE    true   // set to true if Marlin should stop the spindle before changing rotation direction
+  #if ENABLED(SPINDLE_FEATURE)
+    //#define SPINDLE_CHANGE_DIR               // Enable if your spindle controller can change spindle direction
+    #define SPINDLE_CHANGE_DIR_STOP            // Enable if the spindle should stop before changing spin direction
+    #define SPINDLE_INVERT_DIR          false  // Set to "true" if the spin direction is reversed
 
-  /**
-   *  The M3 & M4 commands use the following equation to convert PWM duty cycle to speed/power
-   *
-   *  SPEED/POWER = PWM duty cycle * SPEED_POWER_SLOPE + SPEED_POWER_INTERCEPT
-   *    where PWM duty cycle varies from 0 to 255
-   *
-   *  set the following for your controller (ALL MUST BE SET)
-   */
-
-  #define SPEED_POWER_SLOPE    118.4
-  #define SPEED_POWER_INTERCEPT  0
-  #define SPEED_POWER_MIN     5000
-  #define SPEED_POWER_MAX    30000    // SuperPID router controller 0 - 30,000 RPM
-
-  //#define SPEED_POWER_SLOPE      0.3922
-  //#define SPEED_POWER_INTERCEPT  0
-  //#define SPEED_POWER_MIN       10
-  //#define SPEED_POWER_MAX      100      // 0-100%
+    /**
+     *  The M3 & M4 commands use the following equation to convert PWM duty cycle to speed/power
+     *
+     *  SPEED/POWER = PWM duty cycle * SPEED_POWER_SLOPE + SPEED_POWER_INTERCEPT
+     *    where PWM duty cycle varies from 0 to 255
+     *
+     *  set the following for your controller (ALL MUST BE SET)
+     */
+    #define SPEED_POWER_SLOPE    118.4
+    #define SPEED_POWER_INTERCEPT  0
+    #define SPEED_POWER_MIN     5000
+    #define SPEED_POWER_MAX    30000    // SuperPID router controller 0 - 30,000 RPM
+  #else
+    #define SPEED_POWER_SLOPE      0.3922
+    #define SPEED_POWER_INTERCEPT  0
+    #define SPEED_POWER_MIN       10
+    #define SPEED_POWER_MAX      100    // 0-100%
+  #endif
 #endif
 
 /**

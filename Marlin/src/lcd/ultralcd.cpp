@@ -22,6 +22,10 @@
 
 #include "../inc/MarlinConfigPre.h"
 
+#if ENABLED(EEPROM_SETTINGS)
+  #include "../module/configuration_store.h"
+#endif
+
 #ifdef LED_BACKLIGHT_TIMEOUT
   #include "../feature/leds/leds.h"
 #endif
@@ -839,6 +843,9 @@ void MarlinUI::update() {
       if (sd_status) {
         safe_delay(500); // Some boards need a delay to get settled
         card.initsd();
+        #if ENABLED(SD_RELOAD_SETTINGS)
+          (void)settings.load();
+        #endif
         if (old_sd_status == 2)
           card.beginautostart();  // Initial boot
         else

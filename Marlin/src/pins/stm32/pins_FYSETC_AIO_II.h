@@ -30,7 +30,7 @@
 
 #define DISABLE_JTAG
 
-#define pins_v2_20190128   // geo-f:add for new pins define
+#define pins_v2_20190128   // Add for new pins define
 
 // Ignore temp readings during development.
 //#define BOGUS_TEMPERATURE_GRACE_PERIOD 2000
@@ -94,20 +94,9 @@
 //#define MOTOR_CURRENT_PWM_E_PIN  -1  // PB13
 // Motor current PWM conversion, PWM value = MotorCurrentSetting * 255 / range
 #ifndef MOTOR_CURRENT_PWM_RANGE
-  #define MOTOR_CURRENT_PWM_RANGE 1500 // geo-f:old 2000
+  #define MOTOR_CURRENT_PWM_RANGE 1500
 #endif
 #define DEFAULT_PWM_MOTOR_CURRENT  {500, 500, 400} // geo-f:old 1300 1300 1250
-
-// 采用 SDIO PCB从左到右数
-// 1:PC10 - SDIO_D2
-// 2:PC11 - SDIO_D3
-// 3:PD2 - SDIO_CMD
-// 4:VCC
-// 5:PC12 - SDIO_CK
-// 6:VDD
-// 7:PC8 - SDIO_D0
-// 8:PC9 - SDIO_D1
-// 9:PA15 - SD_DETECT_PIN
 
 //
 // Heaters / Fans
@@ -128,6 +117,31 @@
 // Misc. Functions
 //
 #define SDSS               PA4
+
+#if HAS_TMC220x
+
+  /**
+   * TMC2208/TMC2209 stepper drivers
+   */
+
+  //
+  // Hardware serial with selector
+  //
+  #define X_HARDWARE_SERIAL  Serial1
+  #define Y_HARDWARE_SERIAL  Serial1
+  #define Z_HARDWARE_SERIAL  Serial1
+  #define E0_HARDWARE_SERIAL Serial1
+
+  #if HAS_DRIVER(TMC2208)
+    #define TMC_SERIAL_MULTIPLEXER
+  #endif
+
+#endif
+
+#if ENABLED(TMC_SERIAL_MULTIPLEXER)
+#define SERIAL_MUL_PIN1 PB13
+#define SERIAL_MUL_PIN2 PB12
+#endif
 
 //
 // LCD Pins

@@ -150,7 +150,9 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
   // Helper to detect touch events
   VPHELPER(VP_SCREENCHANGE, nullptr, DGUSScreenVariableHandler::ScreenChangeHook, nullptr),
   VPHELPER(VP_SCREENCHANGE_ASK, nullptr, DGUSScreenVariableHandler::ScreenChangeHookIfIdle, nullptr),
-  VPHELPER(VP_SCREENCHANGE_WHENSD, nullptr, DGUSScreenVariableHandler::ScreenChangeHookIfSD, nullptr),
+  #if ENABLED(SDSUPPORT)
+    VPHELPER(VP_SCREENCHANGE_WHENSD, nullptr, DGUSScreenVariableHandler::ScreenChangeHookIfSD, nullptr),
+  #endif
   VPHELPER(VP_CONFIRMED, nullptr, DGUSScreenVariableHandler::ScreenConfirmedOK, nullptr),
 
   VPHELPER(VP_TEMP_ALL_OFF, nullptr, &DGUSScreenVariableHandler::HandleAllHeatersOff, nullptr),
@@ -200,7 +202,9 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
   VPHELPER(VP_ZPos, &current_position.z, nullptr, DGUSScreenVariableHandler::DGUSLCD_SendFloatAsLongValueToDisplay<2>),
 
   // Print Progress.
-  VPHELPER(VP_PrintProgress_Percentage, &ui.progress_override, nullptr, DGUSScreenVariableHandler::DGUSLCD_SendWordValueToDisplay ),
+  #if ENABLED(LCD_SET_PROGRESS_MANUALLY)
+    VPHELPER(VP_PrintProgress_Percentage, &ui.progress_override, nullptr, DGUSScreenVariableHandler::DGUSLCD_SendWordValueToDisplay ),
+  #endif
 
   // Print Time
   VPHELPER_STR(VP_PrintTime, nullptr, VP_PrintTime_LEN, nullptr, DGUSScreenVariableHandler::DGUSLCD_SendPrintTimeToDisplay ),

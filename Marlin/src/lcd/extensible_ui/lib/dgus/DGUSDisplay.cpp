@@ -518,7 +518,7 @@ void DGUSScreenVariableHandler::HandleManualMove(DGUS_VP_Variable &var, void *va
     char buf[6] = "G28 X";
     buf[4] = axiscode;
     //DEBUG_ECHOPAIR(" ", buf);
-    while (!enqueue_and_echo_command(buf)) idle();
+    queue.enqueue_one_now(buf);
     //DEBUG_ECHOLNPGM(" ✓");
     ScreenHandler.ForceCompleteUpdate();
     return;
@@ -529,7 +529,7 @@ void DGUSScreenVariableHandler::HandleManualMove(DGUS_VP_Variable &var, void *va
     bool old_relative_mode = relative_mode;
     if (!relative_mode) {
       //DEBUG_ECHOPGM(" G91");
-      while (!enqueue_and_echo_command("G91")) idle();
+      queue.enqueue_now_P(PSTR("G91"));
       //DEBUG_ECHOPGM(" ✓ ");
     }
     char buf[32];  // G1 X9999.99 F12345
@@ -540,18 +540,18 @@ void DGUSScreenVariableHandler::HandleManualMove(DGUS_VP_Variable &var, void *va
     int16_t fraction = ABS(movevalue) % 100;
     snprintf_P(buf, 32, PSTR("G0 %c%s%d.%02d F%d"), axiscode, sign, value, fraction, speed);
     //DEBUG_ECHOPAIR(" ", buf);
-    while (!enqueue_and_echo_command(buf)) idle();
+    queue.enqueue_one_now(buf);
     //DEBUG_ECHOLNPGM(" ✓ ");
     if (backup_speed != speed) {
       snprintf_P(buf, 32, PSTR("G0 F%d"), backup_speed);
-      while (!enqueue_and_echo_command(buf)) idle();
+      queue.enqueue_one_now(buf);
       //DEBUG_ECHOPAIR(" ", buf);
     }
     //while (!enqueue_and_echo_command(buf)) idle();
     //DEBUG_ECHOLNPGM(" ✓ ");
     if (!old_relative_mode) {
       //DEBUG_ECHOPGM("G90");
-      while (!enqueue_and_echo_command("G90")) idle();
+      queue.enqueue_now_P(PSTR("G90"));
       //DEBUG_ECHOPGM(" ✓ ");
     }
   }

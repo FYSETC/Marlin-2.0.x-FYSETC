@@ -109,6 +109,19 @@ typedef int8_t pin_t;
   #endif
 #endif
 
+#ifdef DGUS_SERIAL_PORT
+  #if !WITHIN(DGUS_SERIAL_PORT, -1, 3)
+    #error "DGUS_SERIAL_PORT must be from -1 to 3"
+  #elif DGUS_SERIAL_PORT == SERIAL_PORT
+    #error "DGUS_SERIAL_PORT must be different than SERIAL_PORT"
+    #ifdef SERIAL_PORT_2
+      #elif DGUS_SERIAL_PORT == SERIAL_PORT_2
+        #error "DGUS_SERIAL_PORT must be different than SERIAL_PORT_2"
+    #endif
+  #endif
+  #define DGUS_SERIAL internalDgusSerial
+#endif
+
 // ------------------------
 // Public functions
 // ------------------------

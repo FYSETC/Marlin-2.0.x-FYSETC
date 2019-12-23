@@ -2853,6 +2853,26 @@
   //#define SERVICE_INTERVAL_3    1 // print hours
 #endif
 
+/**
+ * DGUS_LCD
+ * Enable in Configuration.h
+ */
+#if ENABLED(DGUS_LCD)
+
+  #define DGUS_SERIAL_PORT 2
+  #define DGUS_BAUDRATE 115200
+
+  #define DGUS_RX_BUFFER_SIZE 128
+  #define DGUS_TX_BUFFER_SIZE 48
+
+  #define DGUS_UPDATE_INTERVAL_MS 500
+
+  #define BOOTSCREEN_TIMEOUT 3000  
+  
+  // Deal with rx overrun situation , ONLY works in AVR now
+  //#define DGUS_SERIAL_STATS_RX_BUFFER_OVERRUNS
+#endif
+
 // @section develop
 
 /**

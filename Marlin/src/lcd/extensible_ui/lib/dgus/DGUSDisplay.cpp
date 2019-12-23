@@ -77,67 +77,7 @@ uint8_t DGUSDisplay::rx_datagram_len = 0;
 bool DGUSDisplay::Initialized = false;
 bool DGUSDisplay::no_reentrance = false;
 
-#if DGUS_RX_BUFFER_SIZE > 256
-  typedef uint16_t r_ring_buffer_pos_t;
-#else
-  typedef uint8_t r_ring_buffer_pos_t;
-#endif
-
-#if DGUS_TX_BUFFER_SIZE > 256
-  typedef uint16_t t_ring_buffer_pos_t;
-#else
-  typedef uint8_t t_ring_buffer_pos_t;
-#endif
-
-class DGUSSerial {
-public:
-  DGUSSerial();
-  ~DGUSSerial();
-
-  r_ring_buffer_pos_t available();
-  t_ring_buffer_pos_t GetTxBufferFree();
-  void write(const uint8_t c);
-
-  int read();
-
-  // ISR for Rx
-  void store_rxd_char();
-  // ISR for Tx (UDRE vector)
-  void tx_udr_empty_irq();
-
-  inline volatile bool is_rx_overrun() {
-    return dgus_rx_overrun;
-  }
-
-  inline void reset_rx_overun() {
-    dgus_rx_overrun = false;
-  }
-
-private:
-  r_ring_buffer_pos_t atomic_read_rx_head();
-  void atomic_set_rx_tail(r_ring_buffer_pos_t value);
-  r_ring_buffer_pos_t atomic_read_rx_tail();
-
-  volatile bool dgus_rx_overrun = false;
-
-  struct ring_buffer_r {
-    volatile r_ring_buffer_pos_t head, tail;
-    unsigned char buffer[DGUS_RX_BUFFER_SIZE];
-  } rx_buffer = { 0, 0, { 0 } };
-
-  struct ring_buffer_t {
-    volatile t_ring_buffer_pos_t head, tail;
-    unsigned char buffer[DGUS_TX_BUFFER_SIZE];
-  } tx_buffer = { 0, 0, { 0 } };
-
-  #if DGUS_RX_BUFFER_SIZE > 256
-    volatile bool rx_tail_value_not_stable = false;
-    volatile uint16_t rx_tail_value_backup = 0;
-  #endif
-
-};
-
-static DGUSSerial dgusserial;
+#define dgusserial DGUS_SERIAL
 
 // endianness swap
 uint16_t swap16(const uint16_t value) { return (value & 0xffU) << 8U | (value >> 8U); }
@@ -706,6 +646,8 @@ void DGUSDisplay::loop() {
 }
 
 void DGUSDisplay::InitDisplay() {
+  dgusserial.begin(DGUS_BAUDRATE);
+
   RequestScreen(
     #if ENABLED(SHOW_BOOTSCREEN)
       DGUSLCD_SCREEN_BOOT
@@ -779,13 +721,16 @@ void DGUSDisplay::RequestScreen(DGUSLCD_Screens screen) {
 
 void DGUSDisplay::ProcessRx() {
 
-  if (!dgusserial.available() && dgusserial.is_rx_overrun()) {
-    // if we've got an overrun, but reset the flag only when we've emptied the buffer
-    // We want to extract as many as valid datagrams possible...
-    DEBUG_ECHOPGM("OVFL");
-    rx_datagram_state = DGUS_IDLE;
-    dgusserial.reset_rx_overun();
-  }
+  #if ENABLED(DGUS_SERIAL_STATS_RX_BUFFER_OVERRUNS)
+    if (!dgusserial.available() && dgusserial.buffer_overruns()) {
+     // if we've got an overrun, but reset the flag only when we've emptied the buffer
+     // We want to extract as many as valid datagrams possible...
+     DEBUG_ECHOPGM("OVFL");
+     rx_datagram_state = DGUS_IDLE;
+     //dgusserial.reset_rx_overun();
+     dgusserial.flush();
+   }
+  #endif
 
   uint8_t receivedbyte;
   while (dgusserial.available()) {
@@ -870,7 +815,7 @@ void DGUSDisplay::ProcessRx() {
   }
 }
 
-size_t DGUSDisplay::GetFreeTxBuffer() { return dgusserial.GetTxBufferFree(); }
+size_t DGUSDisplay::GetFreeTxBuffer() { return dgusserial.get_tx_buffer_free(); }
 
 void DGUSDisplay::WriteHeader(uint16_t adr, uint8_t cmd, uint8_t payloadlen) {
   dgusserial.write(DGUS_HEADER1);
@@ -885,210 +830,7 @@ void DGUSDisplay::WritePGM(const char str[], uint8_t len) {
   while (len--) dgusserial.write(pgm_read_byte(str++));
 }
 
-// Serial implementation stolen from MarlinSerial.cpp -- but functinality reduced to our use case
-// (no XON/XOFF, no Emergency Parser, no error statistics, no support to send from interrupts ...)
-
-// Define all UART registers
-#define _TNAME(X,Y,Z)                X##Y##Z
-#define TNAME(X,Y,Z)                _TNAME(X,Y,Z)
-#define DGUS_SERIAL_RX_VECT          TNAME(USART,DGUS_SER_PORT,_RX_vect)
-#define DGUS_SERIAL_UDRE_VECT        TNAME(USART,DGUS_SER_PORT,_UDRE_vect)
-#define DGUS_UCSRxA                  TNAME(UCSR,DGUS_SER_PORT,A)
-#define DGUS_UCSRxB                  TNAME(UCSR,DGUS_SER_PORT,B)
-#define DGUS_UCSRxC                  TNAME(UCSR,DGUS_SER_PORT,C)
-#define DGUS_UBRRxH                  TNAME(UBRR,DGUS_SER_PORT,H)
-#define DGUS_UBRRxL                  TNAME(UBRR,DGUS_SER_PORT,L)
-#define DGUS_UDRx                    TNAME(UDR,DGUS_SER_PORT,)
-
-#define U2Xx                    TNAME(U2X,DGUS_SER_PORT,)
-#define RXENx                   TNAME(RXEN,DGUS_SER_PORT,)
-#define TXENx                   TNAME(TXEN,DGUS_SER_PORT,)
-#define TXCx                    TNAME(TXC,DGUS_SER_PORT,)
-#define RXCIEx                  TNAME(RXCIE,DGUS_SER_PORT,)
-#define UDRIEx                  TNAME(UDRIE,DGUS_SER_PORT,)
-#define UDREx                   TNAME(UDRE,DGUS_SER_PORT,)
-
 // A SW memory barrier, to ensure GCC does not overoptimize loops
 #define sw_barrier() asm volatile("": : :"memory");
-
-DGUSSerial::DGUSSerial() {
-  // Initialize UART
-  DGUS_UCSRxA = 1 << U2Xx;
-  const uint16_t baud_setting = (F_CPU / 4 / DGUS_BAUDRATE - 1) / 2;
-  DGUS_UBRRxH = baud_setting >> 8;
-  DGUS_UBRRxL = baud_setting;
-  DGUS_UCSRxC = 0x06;
-  DGUS_UCSRxB = 1 << RXCIEx | 1 << TXENx | 1 << RXENx;  // Enable TX,RX and the RX interrupts.
-}
-
-DGUSSerial::~DGUSSerial() { DGUS_UCSRxB = 0; }
-
-// "Atomically" read the RX head index value without disabling interrupts:
-// This MUST be called with RX interrupts enabled, and CAN'T be called
-// from the RX ISR itself!
-FORCE_INLINE r_ring_buffer_pos_t DGUSSerial::atomic_read_rx_head() {
-  #if RX_BUFFER_SIZE > 256
-    // Keep reading until 2 consecutive reads return the same value,
-    // meaning there was no update in-between caused by an interrupt.
-    // This works because serial RX interrupts happen at a slower rate
-    // than successive reads of a variable, so 2 consecutive reads with
-    // the same value means no interrupt updated it.
-    r_ring_buffer_pos_t vold, vnew = rx_buffer.head;
-    sw_barrier();
-    do {
-      vold = vnew;
-      vnew = rx_buffer.head;
-      sw_barrier();
-    } while (vold != vnew);
-    return vnew;
-  #else
-    // With an 8bit index, reads are always atomic. No need for special handling
-    return rx_buffer.head;
-  #endif
-}
-
-// Set RX tail index, taking into account the RX ISR could interrupt
-//  the write to this variable in the middle - So a backup strategy
-//  is used to ensure reads of the correct values.
-//    -Must NOT be called from the RX ISR -
-FORCE_INLINE void DGUSSerial::atomic_set_rx_tail(r_ring_buffer_pos_t value) {
-  #if RX_BUFFER_SIZE > 256
-    // Store the new value in the backup
-    rx_tail_value_backup = value;
-    sw_barrier();
-    // Flag we are about to change the true value
-    rx_tail_value_not_stable = true;
-    sw_barrier();
-    // Store the new value
-    rx_buffer.tail = value;
-    sw_barrier();
-    // Signal the new value is completely stored into the value
-    rx_tail_value_not_stable = false;
-    sw_barrier();
-  #else
-    rx_buffer.tail = value;
-  #endif
-}
-
-// Get the RX tail index, taking into account the read could be
-//  interrupting in the middle of the update of that index value
-//    -Called from the RX ISR -
-FORCE_INLINE r_ring_buffer_pos_t DGUSSerial::atomic_read_rx_tail() {
-  #if RX_BUFFER_SIZE > 256
-    // If the true index is being modified, return the backup value
-    if (rx_tail_value_not_stable) return rx_tail_value_backup;
-  #endif
-  // The true index is stable, return it
-  return rx_buffer.tail;
-}
-
-// (called with RX interrupts disabled)
-FORCE_INLINE void DGUSSerial::store_rxd_char() {
-  // Get the tail - Nothing can alter its value while this ISR is executing, but there's
-  // a chance that this ISR interrupted the main process while it was updating the index.
-  // The backup mechanism ensures the correct value is always returned.
-  const r_ring_buffer_pos_t t = atomic_read_rx_tail();
-
-  // Get the head pointer - This ISR is the only one that modifies its value, so it's safe to read here
-  r_ring_buffer_pos_t h = rx_buffer.head;
-
-  // Get the next element
-  r_ring_buffer_pos_t i = (r_ring_buffer_pos_t) (h + 1) & (r_ring_buffer_pos_t) (DGUS_RX_BUFFER_SIZE - 1);
-
-  // Read the character from the USART
-  uint8_t c = DGUS_UDRx;
-
-  // If the character is to be stored at the index just before the tail
-  // (such that the head would advance to the current tail), the RX FIFO is
-  // full, so don't write the character or advance the head.
-  if (i != t) {
-    rx_buffer.buffer[h] = c;
-    h = i;
-  }
-  else
-    dgus_rx_overrun = true;
-
-  // Store the new head value - The main loop will retry until the value is stable
-  rx_buffer.head = h;
-}
-
-// (called with TX irqs disabled)
-FORCE_INLINE void DGUSSerial::tx_udr_empty_irq() {
-  // Read positions
-  uint8_t t = tx_buffer.tail;
-  const uint8_t h = tx_buffer.head;
-  // If nothing to transmit, just disable TX interrupts. This could
-  // happen as the result of the non atomicity of the disabling of RX
-  // interrupts that could end reenabling TX interrupts as a side effect.
-  if (h == t) {
-    CBI(DGUS_UCSRxB, UDRIEx); // (Non-atomic, could be reenabled by the main program, but eventually this will succeed)
-    return;
-  }
-
-  // There is something to TX, Send the next byte
-  const uint8_t c = tx_buffer.buffer[t];
-  t = (t + 1) & (DGUS_TX_BUFFER_SIZE - 1);
-  DGUS_UDRx = c;
-  tx_buffer.tail = t;
-
-  // Clear the TXC bit (by writing a one to its bit location).
-  // Ensures flush() won't return until the bytes are actually written/
-  SBI(DGUS_UCSRxA, TXCx);
-
-  // Disable interrupts if there is nothing to transmit following this byte
-  if (h == t) CBI(DGUS_UCSRxB, UDRIEx);
-}
-
-r_ring_buffer_pos_t DGUSSerial::available() {
-  const r_ring_buffer_pos_t h = atomic_read_rx_head(), t = rx_buffer.tail;
-  return (r_ring_buffer_pos_t) (DGUS_RX_BUFFER_SIZE + h - t) & (DGUS_RX_BUFFER_SIZE - 1);
-}
-
-int DGUSSerial::read() {
-  const r_ring_buffer_pos_t h = atomic_read_rx_head();
-
-  // Read the tail. Main thread owns it, so it is safe to directly read it
-  r_ring_buffer_pos_t t = rx_buffer.tail;
-
-  // If nothing to read, return now
-  if (h == t) return -1;
-
-  // Get the next char
-  const int v = rx_buffer.buffer[t];
-  t = (r_ring_buffer_pos_t) (t + 1) & (DGUS_RX_BUFFER_SIZE - 1);
-
-  // Advance tail - Making sure the RX ISR will always get an stable value, even
-  // if it interrupts the writing of the value of that variable in the middle.
-  atomic_set_rx_tail(t);
-  return v;
-}
-
-void DGUSSerial::write(const uint8_t c) {
-  // are we currently tranmitting? If not, we can just place the byte in UDR.
-  if (!TEST(DGUS_UCSRxB, UDRIEx) && TEST(DGUS_UCSRxA, UDREx)) {
-    DGUS_UDRx = c;
-    SBI(DGUS_UCSRxA, TXCx);
-    return;
-  }
-
-  const uint8_t i = (tx_buffer.head + 1) & (DGUS_TX_BUFFER_SIZE - 1);
-  while (i == tx_buffer.tail) sw_barrier();
-
-  // Store new char. head is always safe to move
-  tx_buffer.buffer[tx_buffer.head] = c;
-  tx_buffer.head = i;
-  SBI(DGUS_UCSRxB, UDRIEx);  // Enable Interrupts to finish off.
-}
-
-t_ring_buffer_pos_t DGUSSerial::GetTxBufferFree() {
-  const t_ring_buffer_pos_t t = tx_buffer.tail,  // next byte to send.
-                            h = tx_buffer.head;  // next pos for queue.
-  int ret = t - h - 1;
-  if (ret < 0) ret += DGUS_TX_BUFFER_SIZE + 1;
-  return ret;
-}
-
-ISR(DGUS_SERIAL_UDRE_VECT) { dgusserial.tx_udr_empty_irq(); }
-ISR(DGUS_SERIAL_RX_VECT) { dgusserial.store_rxd_char(); }
 
 #endif // DGUS_LCD

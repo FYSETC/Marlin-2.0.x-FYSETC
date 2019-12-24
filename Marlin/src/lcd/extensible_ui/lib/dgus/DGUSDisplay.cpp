@@ -179,24 +179,10 @@ void DGUSScreenVariableHandler::DGUSLCD_SendPercentageToDisplay(DGUS_VP_Variable
 // It is using a hex display for that: It expects BSD coded data in the format xxyyzz
 void DGUSScreenVariableHandler::DGUSLCD_SendPrintTimeToDisplay(DGUS_VP_Variable &var) {
   duration_t elapsed = print_job_timer.duration();
-
-  uint8_t days  = elapsed.day(),
-          hours = elapsed.hour() % 24,
-          minutes = elapsed.minute() % 60,
-          seconds = elapsed.second() % 60;
-
-  char buf[14], *p = buf; // that two extra bytes saves us some flash...
-
-  if (days) { *p++ = days / 10 + '0'; *p++ = days % 10 + '0'; *p++ = 'd'; }
-  *p++ = hours / 10 + '0'; *p++ = hours % 10 + '0'; *p++ = 'h';
-  *p++ = minutes / 10 + '0'; *p++ = minutes % 10 + '0'; *p++ = 'm';
-  *p++ = seconds / 10 + '0'; *p++ = seconds % 10 + '0'; *p++ = 's';
-  *p = '\0';
-
+  char buf[32];
+  elapsed.toString(buf);
   dgusdisplay.WriteVariable(VP_PrintTime, buf, var.size, true);
 }
-
-
 
 // Send an uint8_t between 0 and 100 to a variable scale to 0..255
 void DGUSScreenVariableHandler::DGUSLCD_PercentageToUint8(DGUS_VP_Variable &var, void *val_ptr) {

@@ -158,5 +158,15 @@ namespace ExtUI {
     }
   #endif
 
+  #if ENABLED(FIRST_LAYER_CAL)
+    void OnLayer1PreheatDone() {
+      // goto zoffset setting screen
+      ScreenHandler.GotoScreen(DGUSLCD_SCREEN_FLC_PRINTING);
+    }
+
+    void OnLayer1Done() {
+      ScreenHandler.GotoScreen(DGUSLCD_SCREEN_UTILITY);
+    }
+  #endif
 }
 #endif // DGUS_LCD

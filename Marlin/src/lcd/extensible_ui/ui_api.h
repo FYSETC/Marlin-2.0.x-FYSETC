@@ -328,6 +328,10 @@ namespace ExtUI {
   #if ENABLED(SINGLE_Z_CALIBRATION)  
     void OnSigleZCalibrationDone();
   #endif
+  #if ENABLED(FIRST_LAYER_CAL)
+    void OnLayer1PreheatDone();
+    void OnLayer1Done();
+  #endif
 };
 
 /**

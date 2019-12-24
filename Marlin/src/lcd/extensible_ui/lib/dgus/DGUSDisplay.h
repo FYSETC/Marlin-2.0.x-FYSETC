@@ -166,6 +166,9 @@ public:
     // Hook for z calibration
     static void HandleZCalibration(DGUS_VP_Variable &var, void *val_ptr);
   #endif
+  #if ENABLED(FIRST_LAYER_CAL)
+    static void HandleFirstLayerCal(DGUS_VP_Variable &var, void *val_ptr);
+  #endif
 
   #if ENABLED(SDSUPPORT)
     // Callback for VP "Display wants to change screen when there is a SD card"

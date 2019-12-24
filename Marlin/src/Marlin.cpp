@@ -181,6 +181,10 @@
   #include "libs/L6470/L6470_Marlin.h"
 #endif
 
+#if ENABLED(FIRST_LAYER_CAL)
+  #include "feature/first_lay_cal.h"
+#endif
+
 const char NUL_STR[] PROGMEM = "",
            G28_STR[] PROGMEM = "G28",
            M21_STR[] PROGMEM = "M21",
@@ -651,6 +655,10 @@ void idle(
 
   #if ENABLED(MAX7219_DEBUG)
     max7219.idle_tasks();
+  #endif
+
+  #if ENABLED(FIRST_LAYER_CAL)
+    layer1Cal.task();
   #endif
 
   ui.update();

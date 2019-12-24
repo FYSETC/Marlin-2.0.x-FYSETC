@@ -43,6 +43,9 @@
 #if ENABLED(POWER_LOSS_RECOVERY)
   #include "../../../../feature/power_loss_recovery.h"
 #endif
+#if ENABLED(FIRST_LAYER_CAL)
+  #include "../../../../feature/first_lay_cal.h"
+#endif
 
 // Preamble... 2 Bytes, usually 0x5A 0xA5, but configurable
 constexpr uint8_t DGUS_HEADER1 = 0x5A;
@@ -1165,6 +1168,23 @@ void DGUSScreenVariableHandler::HandleHeaterControl(DGUS_VP_Variable &var, void 
       queue.enqueue_now_P(PSTR("M915\n"));
       queue.enqueue_now_P(PSTR("G28 Z\n"));
       queue.enqueue_now_P(PSTR("M920\n"));
+    }
+  }
+#endif
+
+#if ENABLED(FIRST_LAYER_CAL)
+  void DGUSScreenVariableHandler::HandleFirstLayerCal(DGUS_VP_Variable &var, void *val_ptr) {
+    DEBUG_ECHOLNPGM("HandleFirstLayerCal");
+    uint16_t option = swap16(*(uint16_t*)val_ptr);
+    if(option==0) {
+      layer1Cal.stop();
+    }
+    else if(option==0xffff) {
+      layer1Cal.quit();
+    }
+    else {
+      GotoScreen(DGUSLCD_SCREEN_FLC_PREHEAT);
+      layer1Cal.start(option);
     }
   }
 #endif

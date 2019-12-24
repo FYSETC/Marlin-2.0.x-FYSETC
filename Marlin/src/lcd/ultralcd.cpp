@@ -1318,6 +1318,10 @@ void MarlinUI::update() {
     #include "extensible_ui/ui_api.h"
   #endif
 
+  #if ENABLED(POWER_LOSS_RECOVERY)
+    #include "../feature/power_loss_recovery.h"
+  #endif
+
   ////////////////////////////////////////////
   /////////////// Status Line ////////////////
   ////////////////////////////////////////////

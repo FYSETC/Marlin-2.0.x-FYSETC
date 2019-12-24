@@ -122,5 +122,12 @@ namespace ExtUI {
     // This is called when any mesh points are updated
   }
 
+  #if ENABLED(POWER_LOSS_RECOVERY)
+    void OnPowerLossResume() {
+      // This is called when resuming from power loss
+      ScreenHandler.GotoScreen(DGUSLCD_SCREEN_POWER_LOSS);
+    }
+  #endif
+
 }
 #endif // DGUS_LCD

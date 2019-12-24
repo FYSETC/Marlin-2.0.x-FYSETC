@@ -120,6 +120,10 @@ public:
   static void HandleManualMove(DGUS_VP_Variable &var, void *val_ptr);
   // Hook for manual extrude.
   static void HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr);
+  #if ENABLED(POWER_LOSS_RECOVERY)
+    // Hook for power loss recovery.
+    static void HandlePowerLossRecovery(DGUS_VP_Variable &var, void *val_ptr);
+  #endif
 
   #if ENABLED(SDSUPPORT)
     // Callback for VP "Display wants to change screen when there is a SD card"

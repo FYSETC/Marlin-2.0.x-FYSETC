@@ -92,6 +92,12 @@ namespace ExtUI {
   void onMeshUpdate(const int8_t xpos, const int8_t ypos, const float zval) {
     // This is called when any mesh points are updated
   }
+
+  #if ENABLED(POWER_LOSS_RECOVERY)
+    void OnPowerLossResume() {
+      // This is called when resume from power loss
+    }
+  #endif
 }
 
 #endif // EXTUI_EXAMPLE && EXTENSIBLE_UI

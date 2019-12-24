@@ -50,6 +50,7 @@ enum DGUSLCD_Screens : uint8_t {
   DGUSLCD_SCREEN_FLOWRATES = 46,
   DGUSLCD_SCREEN_SDFILELIST = 50,
   DGUSLCD_SCREEN_SDPRINTMANIPULATION = 52,
+  DGUSLCD_SCREEN_POWER_LOSS = 100,
   DGUSLCD_SCREEN_CONFIRM = 240,
   DGUSLCD_SCREEN_KILL = 250, ///< Kill Screen. Must always be 250 (to be able to display "Error wrong LCD Version")
   DGUSLCD_SCREEN_POPUP = 252,  ///< special target, popup screen will also return this code to say "return to previous screen"
@@ -116,6 +117,9 @@ constexpr uint16_t VP_MOVE_E1 = 0x2112;
 //constexpr uint16_t VP_MOVE_E4 = 0x2118;
 //constexpr uint16_t VP_MOVE_E5 = 0x211A;
 constexpr uint16_t VP_HOME_ALL = 0x2120;
+
+// Power loss recovery
+constexpr uint16_t VP_POWER_LOSS_RECOVERY = 0x2180;
 
 // Firmware version on the boot screen.
 constexpr uint16_t VP_MARLIN_VERSION = 0x3000;

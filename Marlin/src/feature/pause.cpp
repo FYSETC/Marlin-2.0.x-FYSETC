@@ -560,7 +560,7 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
         host_prompt_do(PROMPT_INFO, PSTR("Reheating"));
       #endif
       #if ENABLED(EXTENSIBLE_UI)
-        ExtUI::onStatusChanged(PSTR("Reheating..."));
+        ExtUI::onUserConfirmRequired_P(PSTR("Reheating..."));
       #endif
 
       // Re-enable the heaters if they timed out

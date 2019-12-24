@@ -285,6 +285,32 @@ void DGUSScreenVariableHandler::DGUSLCD_SendStringToDisplayPGM(DGUS_VP_Variable 
 
 #endif
 
+// Send fan status value to the display.
+#if FAN_COUNT > 0
+  void DGUSScreenVariableHandler::DGUSLCD_SendFanStatusToDisplay(DGUS_VP_Variable &var) {
+    if (var.memadr) {
+      DEBUG_ECHOPAIR(" DGUSLCD_SendFanStatusToDisplay ", var.VP);
+      DEBUG_ECHOLNPAIR(" data ", *(uint8_t *)var.memadr);
+      uint16_t data_to_send = 0;
+      if(*(uint8_t *) var.memadr) data_to_send = 1;
+      data_to_send = swap16(data_to_send);
+      dgusdisplay.WriteVariable(var.VP, data_to_send);
+    }
+  }
+#endif
+
+// Send heater status value to the display.
+void DGUSScreenVariableHandler::DGUSLCD_SendHeaterStatusToDisplay(DGUS_VP_Variable &var) {
+  if (var.memadr) {
+    DEBUG_ECHOPAIR(" DGUSLCD_SendHeaterStatusToDisplay ", var.VP);
+    DEBUG_ECHOLNPAIR(" data ", *(int16_t *)var.memadr);
+    uint16_t data_to_send = 0;
+    if(*(int16_t *) var.memadr) data_to_send = 1;
+    data_to_send = swap16(data_to_send);
+    dgusdisplay.WriteVariable(var.VP, data_to_send);
+  }
+}
+
 #if ENABLED(SDSUPPORT)
 
   void DGUSScreenVariableHandler::ScreenChangeHookIfSD(DGUS_VP_Variable &var, void *val_ptr) {
@@ -833,6 +859,50 @@ void DGUSScreenVariableHandler::HandleProbeOffsetZChanged(DGUS_VP_Variable &var,
     return;
   }
 #endif
+
+#if FAN_COUNT > 0
+  void DGUSScreenVariableHandler::HandleFanControl(DGUS_VP_Variable &var, void *val_ptr) {
+    DEBUG_ECHOLNPGM("HandleFanControl");
+
+    if (*(uint8_t*)var.memadr > 0) {
+      *(uint8_t*)var.memadr = 0;
+    }
+    else {
+      *(uint8_t*)var.memadr = 255;
+    }
+  }
+#endif
+
+void DGUSScreenVariableHandler::HandleHeaterControl(DGUS_VP_Variable &var, void *val_ptr) {
+  DEBUG_ECHOLNPGM("HandleHeaterControl");
+  
+  uint8_t preheat_temp = 0;
+  switch(var.VP) {
+    case VP_E0_CONTROL:
+    #if HOTENDS > 1
+      case VP_E1_CONTROL:
+    #endif
+    #if HOTENDS > 2
+      case VP_E2_CONTROL:
+    #endif
+    #if HOTENDS > 3
+      #error More than 2 Hotends currently not implemented on the Display UI design.
+    #endif
+      preheat_temp = PREHEAT_1_TEMP_HOTEND;
+      break;
+
+    case VP_BED_CONTROL:
+      preheat_temp = PREHEAT_1_TEMP_BED;
+      break;
+  }
+
+  if (*(int16_t*)var.memadr > 0) {
+    *(int16_t*)var.memadr = 0;
+  }
+  else {
+    *(int16_t*)var.memadr = preheat_temp;
+  }
+}
 
 void DGUSScreenVariableHandler::UpdateNewScreen(DGUSLCD_Screens newscreen, bool popup) {
   DEBUG_ECHOLNPAIR("SetNewScreen: ", newscreen);

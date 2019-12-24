@@ -123,6 +123,21 @@ constexpr uint16_t VP_MOTOR_LOCK_UNLOK = 0x2130;
 // Power loss recovery
 constexpr uint16_t VP_POWER_LOSS_RECOVERY = 0x2180;
 
+// Fan Control Buttons , switch between "off" and "on"
+constexpr uint16_t VP_FAN_CONTROL = 0x2200;
+constexpr uint16_t VP_FAN1_CONTROL = 0x2202;
+//constexpr uint16_t VP_FAN2_CONTROL = 0x2204;
+//constexpr uint16_t VP_FAN3_CONTROL = 0x2206;
+
+// Heater Control Buttons , triged between "cool down" and "heat PLA" state
+constexpr uint16_t VP_E0_CONTROL = 0x2210;
+//constexpr uint16_t VP_E1_CONTROL = 0x2212;
+//constexpr uint16_t VP_E2_CONTROL = 0x2214;
+//constexpr uint16_t VP_E3_CONTROL = 0x2216;
+//constexpr uint16_t VP_E4_CONTROL = 0x2218;
+//constexpr uint16_t VP_E5_CONTROL = 0x221A;
+constexpr uint16_t VP_BED_CONTROL = 0x221C;
+
 // Settings store , reset
 constexpr uint16_t VP_SETTINGS = 0x2400;
 
@@ -165,6 +180,10 @@ constexpr uint16_t VP_Flowrate_E1 = 0x3092; // 2 Byte Integer
 //constexpr uint16_t VP_Flowrate_E5 = 0x309A;
 
 constexpr uint16_t VP_Fan_Percentage = 0x3100;  // 2 Byte Integer (0..100)
+//constexpr uint16_t VP_Fan1_Percentage = 0x33A2;  // 2 Byte Integer (0..100)
+//constexpr uint16_t VP_Fan2_Percentage = 0x33A4;  // 2 Byte Integer (0..100)
+//constexpr uint16_t VP_Fan3_Percentage = 0x33A6;  // 2 Byte Integer (0..100)
+
 constexpr uint16_t VP_Feedrate_Percentage = 0x3102; // 2 Byte Integer (0..100)
 constexpr uint16_t VP_PrintProgress_Percentage = 0x3104; // 2 Byte Integer (0..100)
 
@@ -194,6 +213,21 @@ constexpr uint16_t VP_SD_FileName3 = 0x3260;
 constexpr uint16_t VP_SD_FileName4 = 0x3280;
 
 constexpr uint16_t VP_SD_Print_ProbeOffsetZ = 0x32A0; //
+
+// Fan status
+constexpr uint16_t VP_FAN_STATUS = 0x3300;
+constexpr uint16_t VP_FAN1_STATUS = 0x3302;
+//constexpr uint16_t VP_FAN2_STATUS = 0x3304;
+//constexpr uint16_t VP_FAN3_STATUS = 0x3306;
+
+// Heater status
+constexpr uint16_t VP_E0_STATUS = 0x3310;
+//constexpr uint16_t VP_E1_STATUS = 0x3312;
+//constexpr uint16_t VP_E2_STATUS = 0x3314;
+//constexpr uint16_t VP_E3_STATUS = 0x3316;
+//constexpr uint16_t VP_E4_STATUS = 0x3318;
+//constexpr uint16_t VP_E5_STATUS = 0x331A;
+constexpr uint16_t VP_BED_STATUS = 0x331C;
 
 constexpr uint16_t VP_MOVE_OPTION = 0x3400;
 

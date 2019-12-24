@@ -144,6 +144,12 @@ public:
     // Hook for live z adjust action
     static void HandleLiveAdjustZ(DGUS_VP_Variable &var, void *val_ptr);
   #endif
+  #if FAN_COUNT > 0
+    // Hook for fan control
+    static void HandleFanControl(DGUS_VP_Variable &var, void *val_ptr);
+  #endif
+  // Hook for heater control
+  static void HandleHeaterControl(DGUS_VP_Variable &var, void *val_ptr);
 
   #if ENABLED(SDSUPPORT)
     // Callback for VP "Display wants to change screen when there is a SD card"
@@ -187,7 +193,7 @@ public:
   // Helpers to convert and transfer data to the display.
   static void DGUSLCD_SendWordValueToDisplay(DGUS_VP_Variable &var);
   static void DGUSLCD_SendStringToDisplay(DGUS_VP_Variable &var);
-  static void DGUSLCD_SendStringToDisplayPGM(DGUS_VP_Variable &var);  
+  static void DGUSLCD_SendStringToDisplayPGM(DGUS_VP_Variable &var);
   static void DGUSLCD_SendTemperturePID(DGUS_VP_Variable &var);
   static void DGUSLCD_SendPercentageToDisplay(DGUS_VP_Variable &var);
   static void DGUSLCD_SendPrintTimeToDisplay(DGUS_VP_Variable &var);
@@ -195,6 +201,11 @@ public:
     static void DGUSLCD_SendPrintAccTimeToDisplay(DGUS_VP_Variable &var);
     static void DGUSLCD_SendPrintsTotalToDisplay(DGUS_VP_Variable &var);
   #endif
+  #if FAN_COUNT > 0
+    static void DGUSLCD_SendFanStatusToDisplay(DGUS_VP_Variable &var);
+  #endif
+  static void DGUSLCD_SendHeaterStatusToDisplay(DGUS_VP_Variable &var);
+
   /// Send a value from 0..100 to a variable with a range from 0..255
   static void DGUSLCD_PercentageToUint8(DGUS_VP_Variable &var, void *val_ptr);
 

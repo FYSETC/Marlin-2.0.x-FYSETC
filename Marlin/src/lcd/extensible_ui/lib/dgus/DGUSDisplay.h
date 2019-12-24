@@ -138,6 +138,12 @@ public:
   	// Hook for "Change this temperture PID para"
     static void HandleTemperturePIDChanged(DGUS_VP_Variable &var, void *val_ptr);
   #endif
+  // Hook for "Change probe offset z"
+  static void HandleProbeOffsetZChanged(DGUS_VP_Variable &var, void *val_ptr);
+  #if ENABLED(BABYSTEPPING)
+    // Hook for live z adjust action
+    static void HandleLiveAdjustZ(DGUS_VP_Variable &var, void *val_ptr);
+  #endif
 
   #if ENABLED(SDSUPPORT)
     // Callback for VP "Display wants to change screen when there is a SD card"

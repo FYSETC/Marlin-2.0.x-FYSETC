@@ -391,6 +391,11 @@ void DGUSScreenVariableHandler::DGUSLCD_SendHeaterStatusToDisplay(DGUS_VP_Variab
       return;
     }
 
+    #if ENABLED(DGUS_PRINT_FILENAME)
+      // Send print filename
+      dgusdisplay.WriteVariable(VP_SD_Print_Filename, filelist.filename(), VP_SD_FileName_LEN, true);
+    #endif
+
     // Setup Confirmation screen
     file_to_print = touched_nr;
     HandleUserConfirmationPopUp(VP_SD_FileSelectConfirm, nullptr, PSTR("Print file"), filelist.filename(), PSTR("from SD Card?"), true, true, false, true);

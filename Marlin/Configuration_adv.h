@@ -2869,6 +2869,7 @@
 
   #define BOOTSCREEN_TIMEOUT 3000  
 
+  #define DGUS_PRINT_FILENAME // Send the selected filename to DGUS ,so we can see the filename durning printing
   //#define DUGS_UI_MOVE_DIS_OPTION
   //#define DGUS_PREHEAT_UI
   //#define DGUS_FILAMENT_LOADUNLOAD

@@ -170,6 +170,12 @@ constexpr uint16_t VP_PrintProgress_Percentage = 0x3104; // 2 Byte Integer (0..1
 constexpr uint16_t VP_PrintTime = 0x3106;
 constexpr uint16_t VP_PrintTime_LEN = 10;
 
+constexpr uint16_t VP_PrintAccTime = 0x3160;
+constexpr uint16_t VP_PrintAccTime_LEN = 32;
+
+constexpr uint16_t VP_PrintsTotal = 0x3180;
+constexpr uint16_t VP_PrintsTotal_LEN = 16;
+
 // Actual Position
 constexpr uint16_t VP_XPos = 0x3110;  // 4 Byte Fixed point number; format xxx.yy
 constexpr uint16_t VP_YPos = 0x3112;  // 4 Byte Fixed point number; format xxx.yy

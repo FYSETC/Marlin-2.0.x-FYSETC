@@ -185,7 +185,10 @@ public:
   static void DGUSLCD_SendTemperturePID(DGUS_VP_Variable &var);
   static void DGUSLCD_SendPercentageToDisplay(DGUS_VP_Variable &var);
   static void DGUSLCD_SendPrintTimeToDisplay(DGUS_VP_Variable &var);
-
+  #if ENABLED(PRINTCOUNTER)
+    static void DGUSLCD_SendPrintAccTimeToDisplay(DGUS_VP_Variable &var);
+    static void DGUSLCD_SendPrintsTotalToDisplay(DGUS_VP_Variable &var);
+  #endif
   /// Send a value from 0..100 to a variable with a range from 0..255
   static void DGUSLCD_PercentageToUint8(DGUS_VP_Variable &var, void *val_ptr);
 

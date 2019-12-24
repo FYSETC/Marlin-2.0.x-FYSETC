@@ -2869,19 +2869,38 @@
 
   #define BOOTSCREEN_TIMEOUT 3000  
 
-  #define DGUS_PRINT_FILENAME // Send the selected filename to DGUS ,so we can see the filename durning printing
-  //#define DUGS_UI_MOVE_DIS_OPTION
-  //#define DGUS_PREHEAT_UI
-  //#define DGUS_FILAMENT_LOADUNLOAD
-  #if ENABLED(DGUS_FILAMENT_LOADUNLOAD)
-    #define DGUS_FILAMENT_PURGE_LENGTH 10
-    #define DGUS_FILAMENT_LOAD_LENGTH_PER_TIME 0.5 // Need to tweak according DGUS_UPDATE_INTERVAL_MS value
+  #if ENABLED(DGUS_UI_FYSETC)      
+    #define DGUS_PRINT_FILENAME // Send the selected filename to DGUS ,so we can see the filename durning printing
+    //#define DUGS_UI_MOVE_DIS_OPTION
+    #define DGUS_PREHEAT_UI
+    #define DGUS_FILAMENT_LOADUNLOAD
+    #if ENABLED(DGUS_FILAMENT_LOADUNLOAD)
+      #define DGUS_FILAMENT_PURGE_LENGTH 10
+      #define DGUS_FILAMENT_LOAD_LENGTH_PER_TIME 0.5 // Need to tweak according DGUS_UPDATE_INTERVAL_MS value
+    #endif 
+
+    #define DGUS_UI_WAITING // It may need a waiting screen between some screens jumping
+    #if ENABLED(DGUS_UI_WAITING)
+      #define DGUS_UI_WAITING_STATUS 10
+      #define DGUS_UI_WAITING_STATUS_PERIOD 8 // Increase to slower waiting status looping
+    #endif
   #endif
-  
-  //#define DGUS_UI_WAITING // It may need a waiting screen between some screens jumping
-  #if ENABLED(DGUS_UI_WAITING)
-    #define DGUS_UI_WAITING_STATUS 10
-    #define DGUS_UI_WAITING_STATUS_PERIOD 8 // Increase to slower waiting status looping
+
+  #if ENABLED(DGUS_UI_HIPRECY)
+    #define DGUS_PRINT_FILENAME // Send the selected filename to DGUS ,so we can see the filename durning printing      
+    #define DUGS_UI_MOVE_DIS_OPTION
+    #define DGUS_PREHEAT_UI
+    #define DGUS_FILAMENT_LOADUNLOAD
+    #if ENABLED(DGUS_FILAMENT_LOADUNLOAD)
+      #define DGUS_FILAMENT_PURGE_LENGTH 10
+      #define DGUS_FILAMENT_LOAD_LENGTH_PER_TIME 0.5 // Need to tweak according DGUS_UPDATE_INTERVAL_MS value
+    #endif
+      
+    #define DGUS_UI_WAITING // It may need a waiting screen between screen jumping
+    #if ENABLED(DGUS_UI_WAITING)
+      #define DGUS_UI_WAITING_STATUS 10
+      #define DGUS_UI_WAITING_STATUS_PERIOD 8 // Increase to slower waiting status looping
+    #endif
   #endif
 
   // Deal with rx overrun situation , ONLY works in AVR now

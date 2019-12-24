@@ -404,7 +404,11 @@ void DGUSScreenVariableHandler::DGUSLCD_SendHeaterStatusToDisplay(DGUS_VP_Variab
   void DGUSScreenVariableHandler::DGUSLCD_SD_StartPrint(DGUS_VP_Variable &var, void *val_ptr) {
     if (!filelist.seek(file_to_print)) return;
     ExtUI::printFile(filelist.shortFilename());
-    ScreenHandler.GotoScreen(DGUSLCD_SCREEN_STATUS);
+    #if ENABLED(DGUS_UI_ORIGIN)
+      ScreenHandler.GotoScreen(DGUSLCD_SCREEN_STATUS);
+    #else
+      ScreenHandler.GotoScreen(DGUSLCD_SCREEN_SDPRINTMANIPULATION);
+    #endif
   }
 
   void DGUSScreenVariableHandler::DGUSLCD_SD_ResumePauseAbort(DGUS_VP_Variable &var, void *val_ptr) {

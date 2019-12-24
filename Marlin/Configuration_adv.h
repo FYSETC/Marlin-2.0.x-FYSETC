@@ -1008,7 +1008,7 @@
    * an option on the LCD screen to continue the print from the last-known
    * point in the file.
    */
-  //#define POWER_LOSS_RECOVERY
+  #define POWER_LOSS_RECOVERY
   #if ENABLED(POWER_LOSS_RECOVERY)
     //#define BACKUP_POWER_SUPPLY       // Backup power / UPS to move the steppers on power loss
     //#define POWER_LOSS_ZRAISE       2 // (mm) Z axis raise on resume (on power loss with UPS)
@@ -2868,6 +2868,8 @@
   #define DGUS_UPDATE_INTERVAL_MS 500
 
   #define BOOTSCREEN_TIMEOUT 3000  
+
+  //#define DUGS_UI_MOVE_DIS_OPTION
   
   // Deal with rx overrun situation , ONLY works in AVR now
   //#define DGUS_SERIAL_STATS_RX_BUFFER_OVERRUNS

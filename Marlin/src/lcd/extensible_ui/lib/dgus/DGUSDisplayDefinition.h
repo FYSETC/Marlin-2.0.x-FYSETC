@@ -183,6 +183,8 @@ constexpr uint16_t VP_SD_FileName2 = 0x3240;
 constexpr uint16_t VP_SD_FileName3 = 0x3260;
 constexpr uint16_t VP_SD_FileName4 = 0x3280;
 
+constexpr uint16_t VP_MOVE_OPTION = 0x3400;
+
 // SPs for certain variables...
 // located at 0x5000 and up
 // Not used yet!

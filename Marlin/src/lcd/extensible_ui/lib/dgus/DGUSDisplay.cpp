@@ -904,6 +904,80 @@ void DGUSScreenVariableHandler::HandleHeaterControl(DGUS_VP_Variable &var, void 
   }
 }
 
+#if ENABLED(DGUS_PREHEAT_UI)
+  void DGUSScreenVariableHandler::HandlePreheat(DGUS_VP_Variable &var, void *val_ptr) {
+    DEBUG_ECHOLNPGM("HandlePreheat");
+
+    uint8_t e_temp = 0;
+    uint8_t bed_temp = 0;
+    uint16_t preheat_option = swap16(*(uint16_t*)val_ptr);
+    switch(preheat_option) {
+      case 0: // Preheat PLA
+        #if defined(PREHEAT_1_TEMP_HOTEND) && defined(PREHEAT_1_TEMP_BED)
+          e_temp = PREHEAT_1_TEMP_HOTEND;
+          bed_temp = PREHEAT_1_TEMP_BED;
+        #endif
+        break;
+      case 1: // Preheat ABS
+        #if defined(PREHEAT_2_TEMP_HOTEND) && defined(PREHEAT_2_TEMP_BED)
+          e_temp = PREHEAT_2_TEMP_HOTEND;
+          bed_temp = PREHEAT_2_TEMP_BED;
+        #endif
+        break;
+      case 2: // Preheat PET
+        #if defined(PREHEAT_3_TEMP_HOTEND) && defined(PREHEAT_3_TEMP_BED)
+          e_temp = PREHEAT_3_TEMP_HOTEND;
+          bed_temp = PREHEAT_3_TEMP_BED;
+        #endif
+        break;
+      case 3: // Preheat FLEX
+        #if defined(PREHEAT_4_TEMP_HOTEND) && defined(PREHEAT_4_TEMP_BED)
+          e_temp = PREHEAT_4_TEMP_HOTEND;
+          bed_temp = PREHEAT_4_TEMP_BED;
+        #endif
+        break;
+      case 7: // Custom preheat
+        break;
+      case 9: // Cool down
+        e_temp = 0;
+        bed_temp = 0;
+        break;
+      default:
+        #if defined(PREHEAT_1_TEMP_HOTEND) && defined(PREHEAT_1_TEMP_BED)
+          e_temp = PREHEAT_1_TEMP_HOTEND;
+          bed_temp = PREHEAT_1_TEMP_BED;
+        #endif
+        break;
+    }
+
+    switch (var.VP) {
+      default: return;
+      #if HOTENDS >= 1
+        case VP_E0_BED_PREHEAT:
+          thermalManager.setTargetHotend(e_temp, 0);
+          #if HAS_HEATED_BED
+            thermalManager.setTargetBed(bed_temp);
+          #endif
+          break;
+      #endif
+      #if HOTENDS >= 2
+        case VP_E1_BED_PREHEAT:
+          thermalManager.setTargetHotend(e_temp, 1);
+          #if HAS_HEATED_BED
+            thermalManager.setTargetBed(bed_temp);
+          #endif
+        break;
+      #endif
+      #if HOTENDS > 3
+        #error More than 2 Hotends currently not implemented on the Display UI design.
+      #endif
+    }
+
+    // Go to the preheat screen to show the heating progress
+    GotoScreen(DGUSLCD_SCREEN_PREHEAT);
+  }
+#endif
+
 void DGUSScreenVariableHandler::UpdateNewScreen(DGUSLCD_Screens newscreen, bool popup) {
   DEBUG_ECHOLNPAIR("SetNewScreen: ", newscreen);
 

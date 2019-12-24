@@ -51,6 +51,7 @@ enum DGUSLCD_Screens : uint8_t {
   DGUSLCD_SCREEN_SDFILELIST = 50,
   DGUSLCD_SCREEN_SDPRINTMANIPULATION = 52,
   DGUSLCD_SCREEN_POWER_LOSS = 100,
+  DGUSLCD_SCREEN_PREHEAT=120,
   DGUSLCD_SCREEN_CONFIRM = 240,
   DGUSLCD_SCREEN_KILL = 250, ///< Kill Screen. Must always be 250 (to be able to display "Error wrong LCD Version")
   DGUSLCD_SCREEN_POPUP = 252,  ///< special target, popup screen will also return this code to say "return to previous screen"
@@ -137,6 +138,15 @@ constexpr uint16_t VP_E0_CONTROL = 0x2210;
 //constexpr uint16_t VP_E4_CONTROL = 0x2218;
 //constexpr uint16_t VP_E5_CONTROL = 0x221A;
 constexpr uint16_t VP_BED_CONTROL = 0x221C;
+
+// Preheat
+constexpr uint16_t VP_E0_BED_PREHEAT = 0x2220;
+constexpr uint16_t VP_E1_BED_CONTROL = 0x2222;
+//constexpr uint16_t VP_E2_BED_CONTROL = 0x2224;
+//constexpr uint16_t VP_E3_BED_CONTROL = 0x2226;
+//constexpr uint16_t VP_E4_BED_CONTROL = 0x2228;
+//constexpr uint16_t VP_E5_BED_CONTROL = 0x222A;
+
 
 // Settings store , reset
 constexpr uint16_t VP_SETTINGS = 0x2400;

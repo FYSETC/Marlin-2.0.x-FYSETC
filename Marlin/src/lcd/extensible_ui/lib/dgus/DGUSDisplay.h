@@ -150,6 +150,10 @@ public:
   #endif
   // Hook for heater control
   static void HandleHeaterControl(DGUS_VP_Variable &var, void *val_ptr);
+  #if ENABLED(DGUS_PREHEAT_UI)
+    // Hook for preheat
+    static void HandlePreheat(DGUS_VP_Variable &var, void *val_ptr);
+  #endif
 
   #if ENABLED(SDSUPPORT)
     // Callback for VP "Display wants to change screen when there is a SD card"

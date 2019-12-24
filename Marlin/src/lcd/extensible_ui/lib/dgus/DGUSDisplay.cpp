@@ -398,7 +398,7 @@ void DGUSScreenVariableHandler::DGUSLCD_SendHeaterStatusToDisplay(DGUS_VP_Variab
 
   void DGUSScreenVariableHandler::DGUSLCD_SD_StartPrint(DGUS_VP_Variable &var, void *val_ptr) {
     if (!filelist.seek(file_to_print)) return;
-    ExtUI::printFile(filelist.filename());
+    ExtUI::printFile(filelist.shortFilename());
     ScreenHandler.GotoScreen(DGUSLCD_SCREEN_STATUS);
   }
 
@@ -1283,7 +1283,7 @@ bool DGUSScreenVariableHandler::loop() {
   }
 
   #if ENABLED(SHOW_BOOTSCREEN)
-    static bool booted = false;    
+    static bool booted = false;
     #if ENABLED(POWER_LOSS_RECOVERY)
       if (!booted && recovery.valid()) {
         booted = true;

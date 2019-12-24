@@ -180,6 +180,7 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
   #if ENABLED(POWER_LOSS_RECOVERY)
     VPHELPER(VP_POWER_LOSS_RECOVERY, nullptr, &DGUSScreenVariableHandler::HandlePowerLossRecovery, nullptr),
   #endif
+  VPHELPER(VP_SETTINGS, nullptr, &DGUSScreenVariableHandler::HandleSettings, nullptr),
 
   { .VP = VP_MARLIN_VERSION, .memadr = (void*)MarlinVersion, .size = VP_MARLIN_VERSION_LEN, .set_by_display_handler = nullptr, .send_to_display_handler =&DGUSScreenVariableHandler::DGUSLCD_SendStringToDisplayPGM },
   // M117 LCD String (We don't need the string in memory but "just" push it to the display on demand, hence the nullptr

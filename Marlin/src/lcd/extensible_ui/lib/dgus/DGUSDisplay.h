@@ -126,11 +126,12 @@ public:
   static void HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr);
   // Hook for motor lock and unlook
   static void HandleMotorLockUnlok(DGUS_VP_Variable &var, void *val_ptr);
-
   #if ENABLED(POWER_LOSS_RECOVERY)
     // Hook for power loss recovery.
     static void HandlePowerLossRecovery(DGUS_VP_Variable &var, void *val_ptr);
   #endif
+  // Hook for settings
+  static void HandleSettings(DGUS_VP_Variable &var, void *val_ptr);
 
   #if ENABLED(SDSUPPORT)
     // Callback for VP "Display wants to change screen when there is a SD card"

@@ -98,7 +98,7 @@
 
 #if ENABLED(DGUS_LCD)
   #if !WITHIN(DGUS_SERIAL_PORT, -1, 6)
-    #error "SERIAL_PORT_2 must be from -1 to 6"
+    #error "DGUS_SERIAL_PORT must be from -1 to 6"
   #elif DGUS_SERIAL_PORT == SERIAL_PORT
     #error "DGUS_SERIAL_PORT must be different than SERIAL_PORT"
   #ifdef SERIAL_PORT_2
@@ -121,6 +121,8 @@
   #elif DGUS_SERIAL_PORT == 6
     #define DGUS_SERIAL Serial6
   #endif
+
+  #define DGUS_SERIAL_GET_TX_BUFFER_FREE DGUS_SERIAL.availableForWrite
 #endif
 
 #include "timers.h"

@@ -120,6 +120,8 @@ typedef int8_t pin_t;
     #endif
   #endif
   #define DGUS_SERIAL internalDgusSerial
+
+  #define DGUS_SERIAL_GET_TX_BUFFER_FREE DGUS_SERIAL.get_tx_buffer_free
 #endif
 
 // ------------------------

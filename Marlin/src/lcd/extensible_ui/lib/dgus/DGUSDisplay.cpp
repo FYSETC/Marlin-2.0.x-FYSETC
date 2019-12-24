@@ -396,7 +396,7 @@ void DGUSScreenVariableHandler::ScreenChangeHook(DGUS_VP_Variable &var, void *va
   UpdateNewScreen(target);
 
   #ifdef DEBUG_DGUSLCD
-    if (!DGUSLCD_FindScreenVPMapList(target)) DEBUG_ECHOLNPAIR("WARNING: No screen Mapping found for ", x);
+    if (!DGUSLCD_FindScreenVPMapList(target)) DEBUG_ECHOLNPAIR("WARNING: No screen Mapping found for ", target);
   #endif
 }
 
@@ -459,7 +459,7 @@ void DGUSScreenVariableHandler::HandleFlowRateChanged(DGUS_VP_Variable &var, voi
 }
 
 void DGUSScreenVariableHandler::HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr) {
-  DEBUG_ECHOLNPGM("HandleManualMove");
+  DEBUG_ECHOLNPGM("HandleManualExtrude");
 
   int16_t movevalue = swap16(*(uint16_t*)val_ptr);
   float target = movevalue * 0.01f;
@@ -723,13 +723,13 @@ void DGUSDisplay::ProcessRx() {
 
   #if ENABLED(DGUS_SERIAL_STATS_RX_BUFFER_OVERRUNS)
     if (!dgusserial.available() && dgusserial.buffer_overruns()) {
-     // if we've got an overrun, but reset the flag only when we've emptied the buffer
-     // We want to extract as many as valid datagrams possible...
-     DEBUG_ECHOPGM("OVFL");
-     rx_datagram_state = DGUS_IDLE;
-     //dgusserial.reset_rx_overun();
-     dgusserial.flush();
-   }
+      // if we've got an overrun, but reset the flag only when we've emptied the buffer
+      // We want to extract as many as valid datagrams possible...
+      DEBUG_ECHOPGM("OVFL");
+      rx_datagram_state = DGUS_IDLE;
+      //dgusserial.reset_rx_overun();
+      dgusserial.flush();
+    }
   #endif
 
   uint8_t receivedbyte;
@@ -815,7 +815,7 @@ void DGUSDisplay::ProcessRx() {
   }
 }
 
-size_t DGUSDisplay::GetFreeTxBuffer() { return dgusserial.get_tx_buffer_free(); }
+size_t DGUSDisplay::GetFreeTxBuffer() { return DGUS_SERIAL_GET_TX_BUFFER_FREE(); }
 
 void DGUSDisplay::WriteHeader(uint16_t adr, uint8_t cmd, uint8_t payloadlen) {
   dgusserial.write(DGUS_HEADER1);

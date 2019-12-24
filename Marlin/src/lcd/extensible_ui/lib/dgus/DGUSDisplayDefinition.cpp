@@ -194,6 +194,11 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
     VPHELPER(VP_Flowrate_E0, nullptr, DGUSScreenVariableHandler::HandleFlowRateChanged, &DGUSScreenVariableHandler::DGUSLCD_SendWordValueToDisplay),
     VPHELPER(VP_EPos, &destination.e, nullptr, DGUSScreenVariableHandler::DGUSLCD_SendFloatAsLongValueToDisplay<2>),
     VPHELPER(VP_MOVE_E0, nullptr, &DGUSScreenVariableHandler::HandleManualExtrude, nullptr),
+    #if ENABLED(PIDTEMP)
+      VPHELPER(VP_E_PID_P, &thermalManager.temp_hotend[0].pid.Kp, DGUSScreenVariableHandler::HandleTemperturePIDChanged, DGUSScreenVariableHandler::DGUSLCD_SendTemperturePID),
+      VPHELPER(VP_E_PID_I, &thermalManager.temp_hotend[0].pid.Ki, DGUSScreenVariableHandler::HandleTemperturePIDChanged, DGUSScreenVariableHandler::DGUSLCD_SendTemperturePID),
+      VPHELPER(VP_E_PID_D, &thermalManager.temp_hotend[0].pid.Kd, DGUSScreenVariableHandler::HandleTemperturePIDChanged, DGUSScreenVariableHandler::DGUSLCD_SendTemperturePID),
+    #endif
   #endif
   #if HOTENDS >= 2
     VPHELPER(VP_T_E1_I, &thermalManager.temp_hotend[1].celsius, nullptr, DGUSLCD_SendFloatAsLongValueToDisplay<0>),
@@ -207,6 +212,11 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
   #if HAS_HEATED_BED
     VPHELPER(VP_T_Bed_Is, &thermalManager.temp_bed.celsius, nullptr, DGUSScreenVariableHandler::DGUSLCD_SendFloatAsLongValueToDisplay<0>),
     VPHELPER(VP_T_Bed_Set, &thermalManager.temp_bed.target, DGUSScreenVariableHandler::HandleTemperatureChanged, &DGUSScreenVariableHandler::DGUSLCD_SendWordValueToDisplay),
+    #if ENABLED(PIDTEMPBED)
+      VPHELPER(VP_BED_PID_P, &thermalManager.temp_bed.pid.Kp, DGUSScreenVariableHandler::HandleTemperturePIDChanged, DGUSScreenVariableHandler::DGUSLCD_SendTemperturePID),
+      VPHELPER(VP_BED_PID_I, &thermalManager.temp_bed.pid.Ki, DGUSScreenVariableHandler::HandleTemperturePIDChanged, DGUSScreenVariableHandler::DGUSLCD_SendTemperturePID),
+      VPHELPER(VP_BED_PID_D, &thermalManager.temp_bed.pid.Kd, DGUSScreenVariableHandler::HandleTemperturePIDChanged, DGUSScreenVariableHandler::DGUSLCD_SendTemperturePID),      
+    #endif
   #endif
 
   // Fan Data.

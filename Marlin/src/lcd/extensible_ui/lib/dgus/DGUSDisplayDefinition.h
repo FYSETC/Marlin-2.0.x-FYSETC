@@ -202,6 +202,14 @@ constexpr uint16_t VP_E0_STEP_PER_MM = 0x3610;
 //constexpr uint16_t VP_E4_STEP_PER_MM = 0x3618;
 //constexpr uint16_t VP_E5_STEP_PER_MM = 0x361A;
 
+// PIDs
+constexpr uint16_t VP_E_PID_P = 0x3700; // at the moment , 2 byte unsigned int , 0~1638.4
+constexpr uint16_t VP_E_PID_I = 0x3702;
+constexpr uint16_t VP_E_PID_D = 0x3704;
+constexpr uint16_t VP_BED_PID_P = 0x3710;
+constexpr uint16_t VP_BED_PID_I = 0x3712;
+constexpr uint16_t VP_BED_PID_D = 0x3714;
+
 // SPs for certain variables...
 // located at 0x5000 and up
 // Not used yet!

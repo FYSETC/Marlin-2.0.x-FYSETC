@@ -134,6 +134,10 @@ public:
   static void HandleSettings(DGUS_VP_Variable &var, void *val_ptr);
   static void HandleStepPerMMChanged(DGUS_VP_Variable &var, void *val_ptr);
   static void HandleStepPerMMExtruderChanged(DGUS_VP_Variable &var, void *val_ptr);
+  #if ENABLED(PIDTEMP) || ENABLED(PIDTEMPBED)
+  	// Hook for "Change this temperture PID para"
+    static void HandleTemperturePIDChanged(DGUS_VP_Variable &var, void *val_ptr);
+  #endif
 
   #if ENABLED(SDSUPPORT)
     // Callback for VP "Display wants to change screen when there is a SD card"
@@ -177,7 +181,8 @@ public:
   // Helpers to convert and transfer data to the display.
   static void DGUSLCD_SendWordValueToDisplay(DGUS_VP_Variable &var);
   static void DGUSLCD_SendStringToDisplay(DGUS_VP_Variable &var);
-  static void DGUSLCD_SendStringToDisplayPGM(DGUS_VP_Variable &var);
+  static void DGUSLCD_SendStringToDisplayPGM(DGUS_VP_Variable &var);  
+  static void DGUSLCD_SendTemperturePID(DGUS_VP_Variable &var);
   static void DGUSLCD_SendPercentageToDisplay(DGUS_VP_Variable &var);
   static void DGUSLCD_SendPrintTimeToDisplay(DGUS_VP_Variable &var);
 

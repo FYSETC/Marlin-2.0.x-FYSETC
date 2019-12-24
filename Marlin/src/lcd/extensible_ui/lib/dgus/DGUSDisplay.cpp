@@ -212,6 +212,58 @@ void DGUSScreenVariableHandler::DGUSLCD_SendStringToDisplayPGM(DGUS_VP_Variable 
   dgusdisplay.WriteVariablePGM(var.VP, tmp, var.size, true);
 }
 
+#if ENABLED(PIDTEMP) || ENABLED(PIDTEMPBED)
+  void DGUSScreenVariableHandler::DGUSLCD_SendTemperturePID(DGUS_VP_Variable &var) {
+    float value = *(float *)var.memadr;
+    float valuesend = 0;
+    switch (var.VP) {
+      default: return;
+      #if HOTENDS >= 1
+        case VP_E_PID_P:
+          valuesend = value;
+          break;
+        case VP_E_PID_I:
+          valuesend = unscalePID_i(value);
+          break;
+        case VP_E_PID_D:
+          valuesend = unscalePID_d(value);
+          break;
+      #endif
+      #if HOTENDS >= 2
+        case VP_E1_PID_P:
+          valuesend = value;
+          break;
+        case VP_E1_PID_I:
+          valuesend = unscalePID_i(value);
+          break;
+        case VP_E1_PID_D:
+          valuesend = unscalePID_d(value);
+          break;
+      #endif
+      #if HAS_HEATED_BED
+        case VP_BED_PID_P:
+          valuesend = value;
+          break;
+        case VP_BED_PID_I:
+          valuesend = unscalePID_i(value);
+          break;
+        case VP_BED_PID_D:
+          valuesend = unscalePID_d(value);
+          break;
+      #endif
+    }
+
+    valuesend *= cpow(10, 1);
+    union { int16_t i; char lb[2]; } endian;
+
+    char tmp[2];
+    endian.i = valuesend;
+    tmp[0] = endian.lb[1];
+    tmp[1] = endian.lb[0];
+    dgusdisplay.WriteVariable(var.VP, tmp, 2);
+  }
+#endif
+
 #if ENABLED(SDSUPPORT)
 
   void DGUSScreenVariableHandler::ScreenChangeHookIfSD(DGUS_VP_Variable &var, void *val_ptr) {
@@ -688,6 +740,57 @@ void DGUSScreenVariableHandler::HandleStepPerMMExtruderChanged(DGUS_VP_Variable 
   ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
   return;
 }
+
+#if ENABLED(PIDTEMP) || ENABLED(PIDTEMPBED)
+  void DGUSScreenVariableHandler::HandleTemperturePIDChanged(DGUS_VP_Variable &var, void *val_ptr) {
+    uint16_t rawvalue = swap16(*(uint16_t*)val_ptr);
+    DEBUG_ECHOLNPAIR("V1:",rawvalue);
+    float value = (float)rawvalue / 10;
+    DEBUG_ECHOLNPAIR("V2:",value);
+    float newvalue = 0;
+  
+    switch (var.VP) {
+      default: return;
+    #if HOTENDS >= 1
+        case VP_E_PID_P:
+          newvalue = value;
+          break;
+        case VP_E_PID_I:
+          newvalue = scalePID_i(value);
+          break;
+        case VP_E_PID_D:
+          newvalue = scalePID_d(value);
+          break;
+    #endif
+    #if HOTENDS >= 2
+        case VP_E1_PID_P:
+          newvalue = value;
+          break;
+        case VP_E1_PID_I:
+          newvalue = scalePID_i(value);
+          break;
+        case VP_E1_PID_D:
+          newvalue = scalePID_d(value);
+          break;
+    #endif
+    #if HAS_HEATED_BED
+        case VP_BED_PID_P:
+          newvalue = value;
+          break;
+        case VP_BED_PID_I:
+          newvalue = scalePID_i(value);
+          break;
+        case VP_BED_PID_D:
+          newvalue = scalePID_d(value);
+          break;
+    #endif
+    }
+
+    DEBUG_ECHOLNPAIR_F("V3:",newvalue);
+    *(float *)var.memadr = newvalue;
+    ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
+  }
+#endif
 
 void DGUSScreenVariableHandler::UpdateNewScreen(DGUSLCD_Screens newscreen, bool popup) {
   DEBUG_ECHOLNPAIR("SetNewScreen: ", newscreen);

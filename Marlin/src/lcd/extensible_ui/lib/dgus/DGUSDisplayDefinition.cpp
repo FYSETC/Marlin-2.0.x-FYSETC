@@ -308,6 +308,10 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
     #endif
   #endif
 
+  #if ENABLED(DGUS_UI_WAITING)
+    VPHELPER(VP_WAITING_STATUS, nullptr, nullptr, DGUSScreenVariableHandler::DGUSLCD_SendWaitingStatusToDisplay),
+  #endif
+
   // Messages for the User, shared by the popup and the kill screen. They cant be autouploaded as we do not buffer content.
   { .VP = VP_MSGSTR1, .memadr = nullptr, .size = VP_MSGSTR1_LEN, .set_by_display_handler = nullptr, .send_to_display_handler = &DGUSScreenVariableHandler::DGUSLCD_SendStringToDisplayPGM },
   { .VP = VP_MSGSTR2, .memadr = nullptr, .size = VP_MSGSTR2_LEN, .set_by_display_handler = nullptr, .send_to_display_handler = &DGUSScreenVariableHandler::DGUSLCD_SendStringToDisplayPGM },

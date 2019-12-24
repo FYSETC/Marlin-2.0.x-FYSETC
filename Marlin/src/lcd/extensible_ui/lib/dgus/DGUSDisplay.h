@@ -217,6 +217,9 @@ public:
     static void DGUSLCD_SendFanStatusToDisplay(DGUS_VP_Variable &var);
   #endif
   static void DGUSLCD_SendHeaterStatusToDisplay(DGUS_VP_Variable &var);
+  #if ENABLED(DGUS_UI_WAITING)
+    static void DGUSLCD_SendWaitingStatusToDisplay(DGUS_VP_Variable &var);
+  #endif
 
   /// Send a value from 0..100 to a variable with a range from 0..255
   static void DGUSLCD_PercentageToUint8(DGUS_VP_Variable &var, void *val_ptr);

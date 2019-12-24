@@ -2876,6 +2876,12 @@
     #define DGUS_FILAMENT_PURGE_LENGTH 10
     #define DGUS_FILAMENT_LOAD_LENGTH_PER_TIME 0.5 // Need to tweak according DGUS_UPDATE_INTERVAL_MS value
   #endif
+  
+  //#define DGUS_UI_WAITING // It may need a waiting screen between some screens jumping
+  #if ENABLED(DGUS_UI_WAITING)
+    #define DGUS_UI_WAITING_STATUS 10
+    #define DGUS_UI_WAITING_STATUS_PERIOD 8 // Increase to slower waiting status looping
+  #endif
 
   // Deal with rx overrun situation , ONLY works in AVR now
   //#define DGUS_SERIAL_STATS_RX_BUFFER_OVERRUNS

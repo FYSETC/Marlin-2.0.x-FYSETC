@@ -321,6 +321,22 @@ void DGUSScreenVariableHandler::DGUSLCD_SendHeaterStatusToDisplay(DGUS_VP_Variab
   }
 }
 
+#if ENABLED(DGUS_UI_WAITING)
+  void DGUSScreenVariableHandler::DGUSLCD_SendWaitingStatusToDisplay(DGUS_VP_Variable &var) {
+    // In FYSETC UI design , there are 10 status that we can loop
+    static uint16_t period = 0;
+    static uint16_t index = 0;
+    //DEBUG_ECHOPAIR(" DGUSLCD_SendWaitingStatusToDisplay ", var.VP);
+    //DEBUG_ECHOLNPAIR(" data ", swap16(index));
+    if(period++ > DGUS_UI_WAITING_STATUS_PERIOD) {
+      dgusdisplay.WriteVariable(var.VP, swap16(index));
+      //DEBUG_ECHOLNPAIR(" data ", swap16(index));
+      if(++index >= DGUS_UI_WAITING_STATUS) index = 0;
+      period = 0;
+    }
+  }
+#endif
+
 #if ENABLED(SDSUPPORT)
 
   void DGUSScreenVariableHandler::ScreenChangeHookIfSD(DGUS_VP_Variable &var, void *val_ptr) {

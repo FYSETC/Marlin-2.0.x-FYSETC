@@ -132,6 +132,8 @@ public:
   #endif
   // Hook for settings
   static void HandleSettings(DGUS_VP_Variable &var, void *val_ptr);
+  static void HandleStepPerMMChanged(DGUS_VP_Variable &var, void *val_ptr);
+  static void HandleStepPerMMExtruderChanged(DGUS_VP_Variable &var, void *val_ptr);
 
   #if ENABLED(SDSUPPORT)
     // Callback for VP "Display wants to change screen when there is a SD card"
@@ -210,6 +212,25 @@ public:
       dgusdisplay.WriteVariable(var.VP, tmp, 4);
     }
   }
+
+  /// Send a float value to the display.
+  /// Display will get a 2-byte integer scaled to the number of digits:
+  /// Tell the display the number of digits and it cheats by displaying a dot between...
+  template<unsigned int decimals>
+  static void DGUSLCD_SendFloatAsIntValueToDisplay(DGUS_VP_Variable &var) {
+    if (var.memadr) {
+      float f = *(float *)var.memadr;
+      DEBUG_ECHOLNPAIR_F(" >> ", f, 6);
+      f *= cpow(10, decimals);
+      union { int16_t i; char lb[2]; } endian;
+  
+      char tmp[2];
+      endian.i = f;
+      tmp[0] = endian.lb[1];
+      tmp[1] = endian.lb[0];
+      dgusdisplay.WriteVariable(var.VP, tmp, 2);
+    }
+  } 
 
   /// Force an update of all VP on the current screen.
   static inline void ForceCompleteUpdate() { update_ptr = 0; ScreenComplete = false; }

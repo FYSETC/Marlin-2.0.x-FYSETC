@@ -31,6 +31,7 @@
 
 #include "../../../../module/temperature.h"
 #include "../../../../module/motion.h"
+#include "../../../../module/planner.h"
 
 #include "../../../ultralcd.h"
 
@@ -228,6 +229,16 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
 
   // Print Time
   VPHELPER_STR(VP_PrintTime, nullptr, VP_PrintTime_LEN, nullptr, DGUSScreenVariableHandler::DGUSLCD_SendPrintTimeToDisplay ),
+
+  VPHELPER(VP_X_STEP_PER_MM, &planner.settings.axis_steps_per_mm[X_AXIS], DGUSScreenVariableHandler::HandleStepPerMMChanged, DGUSScreenVariableHandler::DGUSLCD_SendFloatAsIntValueToDisplay<1>),
+  VPHELPER(VP_Y_STEP_PER_MM, &planner.settings.axis_steps_per_mm[Y_AXIS], DGUSScreenVariableHandler::HandleStepPerMMChanged, DGUSScreenVariableHandler::DGUSLCD_SendFloatAsIntValueToDisplay<1>),
+  VPHELPER(VP_Z_STEP_PER_MM, &planner.settings.axis_steps_per_mm[Z_AXIS], DGUSScreenVariableHandler::HandleStepPerMMChanged, DGUSScreenVariableHandler::DGUSLCD_SendFloatAsIntValueToDisplay<1>),
+  #if HOTENDS >= 1
+    VPHELPER(VP_E0_STEP_PER_MM, &planner.settings.axis_steps_per_mm[E0_AXIS], DGUSScreenVariableHandler::HandleStepPerMMExtruderChanged, DGUSScreenVariableHandler::DGUSLCD_SendFloatAsIntValueToDisplay<1>),
+  #endif
+  #if HOTENDS >= 2
+    VPHELPER(VP_E1_STEP_PER_MM, &planner.settings.axis_steps_per_mm[E1_AXIS], DGUSScreenVariableHandler::HandleStepPerMMExtruderChanged, DGUSScreenVariableHandler::DGUSLCD_SendFloatAsIntValueToDisplay<1>),
+  #endif
 
   // SDCard File listing.
   #if ENABLED(SDSUPPORT)

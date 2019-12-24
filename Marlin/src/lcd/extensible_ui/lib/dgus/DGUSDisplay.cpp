@@ -632,6 +632,63 @@ void DGUSScreenVariableHandler::HandleSettings(DGUS_VP_Variable &var, void *val_
   }
 }
 
+void DGUSScreenVariableHandler::HandleStepPerMMChanged(DGUS_VP_Variable &var, void *val_ptr) {
+  DEBUG_ECHOLNPGM("HandleStepPerMMChanged");
+
+  uint16_t value_raw = swap16(*(uint16_t*)val_ptr);
+  DEBUG_ECHOLNPAIR("value_raw:",value_raw);
+  float value = (float)value_raw/10;
+  ExtUI::axis_t axis;
+  switch (var.VP) {
+    case VP_X_STEP_PER_MM:
+      axis = ExtUI::axis_t::X;
+      break;
+
+    case VP_Y_STEP_PER_MM:
+      axis = ExtUI::axis_t::Y;
+      break;
+
+    case VP_Z_STEP_PER_MM:
+      axis = ExtUI::axis_t::Z;
+      break;
+
+    default: return;
+  }
+  DEBUG_ECHOLNPAIR_F("value:",value); 
+  ExtUI::setAxisSteps_per_mm(value,axis);
+  DEBUG_ECHOLNPAIR_F("value_set:",ExtUI::getAxisSteps_per_mm(axis));
+  ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
+  return;
+}
+
+void DGUSScreenVariableHandler::HandleStepPerMMExtruderChanged(DGUS_VP_Variable &var, void *val_ptr) {
+  DEBUG_ECHOLNPGM("HandleStepPerMMExtruderChanged");
+
+  uint16_t value_raw = swap16(*(uint16_t*)val_ptr);
+  DEBUG_ECHOLNPAIR("value_raw:",value_raw);
+  float value = (float)value_raw/10;
+  ExtUI::extruder_t extruder;
+  switch (var.VP) {
+    #if HOTENDS >= 1
+      case VP_E0_STEP_PER_MM:
+        extruder = ExtUI::extruder_t::E0;
+        break;
+    #endif
+    #if HOTENDS >= 1
+      case VP_Y_STEP_PER_MM:
+        extruder = ExtUI::extruder_t::E1;
+        break;
+    #endif
+
+    default: return;
+  }
+  DEBUG_ECHOLNPAIR_F("value:",value);
+  ExtUI::setAxisSteps_per_mm(value,extruder);
+  DEBUG_ECHOLNPAIR_F("value_set:",ExtUI::getAxisSteps_per_mm(extruder));
+  ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
+  return;
+}
+
 void DGUSScreenVariableHandler::UpdateNewScreen(DGUSLCD_Screens newscreen, bool popup) {
   DEBUG_ECHOLNPAIR("SetNewScreen: ", newscreen);
 

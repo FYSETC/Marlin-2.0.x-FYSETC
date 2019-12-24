@@ -188,6 +188,20 @@ constexpr uint16_t VP_SD_FileName4 = 0x3280;
 
 constexpr uint16_t VP_MOVE_OPTION = 0x3400;
 
+// Step per mm
+constexpr uint16_t VP_X_STEP_PER_MM = 0x3600; // at the moment , 2 byte unsigned int , 0~1638.4
+//constexpr uint16_t VP_X2_STEP_PER_MM = 0x3602;
+constexpr uint16_t VP_Y_STEP_PER_MM = 0x3604;
+//constexpr uint16_t VP_Y2_STEP_PER_MM = 0x3606;
+constexpr uint16_t VP_Z_STEP_PER_MM = 0x3608;
+//constexpr uint16_t VP_Z2_STEP_PER_MM = 0x360A;
+constexpr uint16_t VP_E0_STEP_PER_MM = 0x3610;
+//constexpr uint16_t VP_E1_STEP_PER_MM = 0x3612;
+//constexpr uint16_t VP_E2_STEP_PER_MM = 0x3614;
+//constexpr uint16_t VP_E3_STEP_PER_MM = 0x3616;
+//constexpr uint16_t VP_E4_STEP_PER_MM = 0x3618;
+//constexpr uint16_t VP_E5_STEP_PER_MM = 0x361A;
+
 // SPs for certain variables...
 // located at 0x5000 and up
 // Not used yet!

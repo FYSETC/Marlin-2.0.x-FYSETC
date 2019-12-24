@@ -568,6 +568,17 @@ void DGUSScreenVariableHandler::HandleManualMove(DGUS_VP_Variable &var, void *va
   return;
 }
 
+void DGUSScreenVariableHandler::HandleMotorLockUnlok(DGUS_VP_Variable &var, void *val_ptr) {
+  DEBUG_ECHOLNPGM("HandleMotorLockUnlok");
+
+  char buf[4];
+  int16_t lock = swap16(*(uint16_t*)val_ptr);
+  lock ? strcpy(buf,"M18") : strcpy(buf,"M17");
+
+  //DEBUG_ECHOPAIR(" ", buf);
+  queue.enqueue_one_now(buf);
+}
+
 #if ENABLED(POWER_LOSS_RECOVERY)
   void DGUSScreenVariableHandler::HandlePowerLossRecovery(DGUS_VP_Variable &var, void *val_ptr) {
     uint16_t value = swap16(*(uint16_t*)val_ptr);

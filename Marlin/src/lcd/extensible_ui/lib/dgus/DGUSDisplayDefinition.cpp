@@ -205,6 +205,9 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
       VPHELPER(VP_E_PID_D, &thermalManager.temp_hotend[0].pid.Kd, DGUSScreenVariableHandler::HandleTemperturePIDChanged, DGUSScreenVariableHandler::DGUSLCD_SendTemperturePID),
       VPHELPER(VP_PID_AUTOTUNE_E0, nullptr, &DGUSScreenVariableHandler::HandlePIDAutotune, nullptr),
     #endif
+    #if ENABLED(DGUS_FILAMENT_LOADUNLOAD)
+      VPHELPER(VP_E0_FILAMENT_LOAD_UNLOAD, nullptr, &DGUSScreenVariableHandler::HandleFilamentOption, &DGUSScreenVariableHandler::HandleFilamentLoadUnload),
+    #endif
   #endif
   #if HOTENDS >= 2
     VPHELPER(VP_T_E1_I, &thermalManager.temp_hotend[1].celsius, nullptr, DGUSLCD_SendFloatAsLongValueToDisplay<0>),

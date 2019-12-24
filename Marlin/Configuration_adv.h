@@ -2871,7 +2871,12 @@
 
   //#define DUGS_UI_MOVE_DIS_OPTION
   //#define DGUS_PREHEAT_UI
-  
+  //#define DGUS_FILAMENT_LOADUNLOAD
+  #if ENABLED(DGUS_FILAMENT_LOADUNLOAD)
+    #define DGUS_FILAMENT_PURGE_LENGTH 10
+    #define DGUS_FILAMENT_LOAD_LENGTH_PER_TIME 0.5 // Need to tweak according DGUS_UPDATE_INTERVAL_MS value
+  #endif
+
   // Deal with rx overrun situation , ONLY works in AVR now
   //#define DGUS_SERIAL_STATS_RX_BUFFER_OVERRUNS
 #endif

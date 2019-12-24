@@ -156,6 +156,12 @@ public:
     // Hook for preheat
     static void HandlePreheat(DGUS_VP_Variable &var, void *val_ptr);
   #endif
+  #if ENABLED(DGUS_FILAMENT_LOADUNLOAD)
+    // Hook for filament load and unload filament option
+    static void HandleFilamentOption(DGUS_VP_Variable &var, void *val_ptr);
+    // Hook for filament load and unload
+    static void HandleFilamentLoadUnload(DGUS_VP_Variable &var);
+  #endif
 
   #if ENABLED(SDSUPPORT)
     // Callback for VP "Display wants to change screen when there is a SD card"

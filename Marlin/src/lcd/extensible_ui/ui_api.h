@@ -325,6 +325,9 @@ namespace ExtUI {
   #if ENABLED(PIDTEMP) || ENABLED(PIDTEMPBED)
     void OnPidTuning(result_t rst);
   #endif
+  #if ENABLED(SINGLE_Z_CALIBRATION)  
+    void OnSigleZCalibrationDone();
+  #endif
 };
 
 /**

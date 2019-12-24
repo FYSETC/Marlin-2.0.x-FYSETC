@@ -1150,6 +1150,25 @@ void DGUSScreenVariableHandler::HandleHeaterControl(DGUS_VP_Variable &var, void 
   }
 #endif
 
+#if ENABLED(SINGLE_Z_CALIBRATION)
+  void DGUSScreenVariableHandler::HandleZCalibration(DGUS_VP_Variable &var, void *val_ptr) {
+    DEBUG_ECHOLNPGM("HandleZCalibration");
+
+    uint16_t option = swap16(*(uint16_t*)val_ptr);
+    if(option) {
+      #if ENABLED(DGUS_UI_WAITING)
+        sendinfoscreen(PSTR("Z is calibrating"), PSTR("Please wait"), NUL_STR, NUL_STR, true, true, true, true);
+        GotoScreen(DGUSLCD_SCREEN_WAITING);
+      #endif
+
+      queue.enqueue_now_P(PSTR("G28\n"));
+      queue.enqueue_now_P(PSTR("M915\n"));
+      queue.enqueue_now_P(PSTR("G28 Z\n"));
+      queue.enqueue_now_P(PSTR("M920\n"));
+    }
+  }
+#endif
+
 void DGUSScreenVariableHandler::UpdateNewScreen(DGUSLCD_Screens newscreen, bool popup) {
   DEBUG_ECHOLNPAIR("SetNewScreen: ", newscreen);
 

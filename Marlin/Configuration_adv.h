@@ -2907,6 +2907,13 @@
   //#define DGUS_SERIAL_STATS_RX_BUFFER_OVERRUNS
 #endif
 
+// M915
+#define SINGLE_Z_CALIBRATION
+#if ENABLED(SINGLE_Z_CALIBRATION)
+  #define CALIBRATION_CURRENT 1000
+  #define CALIBRATION_EXTRA_HEIGHT 30
+#endif
+
 // @section develop
 
 /**

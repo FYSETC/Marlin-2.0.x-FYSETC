@@ -162,6 +162,10 @@ public:
     // Hook for filament load and unload
     static void HandleFilamentLoadUnload(DGUS_VP_Variable &var);
   #endif
+  #if ENABLED(SINGLE_Z_CALIBRATION)
+    // Hook for z calibration
+    static void HandleZCalibration(DGUS_VP_Variable &var, void *val_ptr);
+  #endif
 
   #if ENABLED(SDSUPPORT)
     // Callback for VP "Display wants to change screen when there is a SD card"

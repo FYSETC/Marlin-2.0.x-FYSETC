@@ -904,6 +904,11 @@ private:
     static void M918();
   #endif
 
+  #if ENABLED(SINGLE_Z_CALIBRATION)
+    static void M915();
+    static void M920();
+  #endif
+
   #if HAS_DIGIPOTSS || HAS_MOTOR_CURRENT_PWM || EITHER(DIGIPOT_I2C, DAC_STEPPER_CURRENT)
     static void M907();
     #if HAS_DIGIPOTSS || ENABLED(DAC_STEPPER_CURRENT)

@@ -152,5 +152,11 @@ namespace ExtUI {
     }
   #endif
 
+  #if ENABLED(SINGLE_Z_CALIBRATION)
+    void OnSigleZCalibrationDone() {
+      ScreenHandler.GotoScreen(DGUSLCD_SCREEN_MAIN);
+    }
+  #endif
+
 }
 #endif // DGUS_LCD

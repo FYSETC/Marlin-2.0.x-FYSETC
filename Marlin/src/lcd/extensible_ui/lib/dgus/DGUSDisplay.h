@@ -137,6 +137,8 @@ public:
   #if ENABLED(PIDTEMP) || ENABLED(PIDTEMPBED)
   	// Hook for "Change this temperture PID para"
     static void HandleTemperturePIDChanged(DGUS_VP_Variable &var, void *val_ptr);
+    // Hook for PID autotune
+    static void HandlePIDAutotune(DGUS_VP_Variable &var, void *val_ptr);
   #endif
   // Hook for "Change probe offset z"
   static void HandleProbeOffsetZChanged(DGUS_VP_Variable &var, void *val_ptr);

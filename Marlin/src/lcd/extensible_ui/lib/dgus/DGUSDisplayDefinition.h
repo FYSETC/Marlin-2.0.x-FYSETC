@@ -147,9 +147,17 @@ constexpr uint16_t VP_E1_BED_CONTROL = 0x2222;
 //constexpr uint16_t VP_E4_BED_CONTROL = 0x2228;
 //constexpr uint16_t VP_E5_BED_CONTROL = 0x222A;
 
-
 // Settings store , reset
 constexpr uint16_t VP_SETTINGS = 0x2400;
+
+// PID autotune
+constexpr uint16_t VP_PID_AUTOTUNE_E0 = 0x2410;
+//constexpr uint16_t VP_PID_AUTOTUNE_E1 = 0x2412;
+//constexpr uint16_t VP_PID_AUTOTUNE_E2 = 0x2414;
+//constexpr uint16_t VP_PID_AUTOTUNE_E3 = 0x2416;
+//constexpr uint16_t VP_PID_AUTOTUNE_E4 = 0x2418;
+//constexpr uint16_t VP_PID_AUTOTUNE_E5 = 0x241A;
+constexpr uint16_t VP_PID_AUTOTUNE_BED = 0x2420;
 
 // Firmware version on the boot screen.
 constexpr uint16_t VP_MARLIN_VERSION = 0x3000;

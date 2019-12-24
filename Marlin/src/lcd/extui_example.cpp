@@ -98,6 +98,12 @@ namespace ExtUI {
       // This is called when resume from power loss
     }
   #endif
+
+  #if ENABLED(PIDTEMP) || ENABLED(PIDTEMPBED)
+    void OnPidTuning(result_t rst) {
+      // This is called temperture PID is tuning
+    }
+  #endif
 }
 
 #endif // EXTUI_EXAMPLE && EXTENSIBLE_UI

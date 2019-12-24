@@ -837,6 +837,40 @@ void DGUSScreenVariableHandler::HandleStepPerMMExtruderChanged(DGUS_VP_Variable 
     *(float *)var.memadr = newvalue;
     ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
   }
+
+  void DGUSScreenVariableHandler::HandlePIDAutotune(DGUS_VP_Variable &var, void *val_ptr) {
+    DEBUG_ECHOLNPGM("HandlePIDAutotune");
+
+    char buf[32] = {0};
+
+    switch(var.VP) {
+      #if HOTENDS >= 1 && ENABLED(PIDTEMP)
+      case VP_PID_AUTOTUNE_E0: // Autotune Extruder 0
+        sprintf(buf, "M303 E%d C5 S210 U1", ExtUI::extruder_t::E0);
+        break;
+      #endif
+      #if HOTENDS >= 2 && ENABLED(PIDTEMP)
+      case VP_PID_AUTOTUNE_E1:
+        sprintf(buf, "M303 E%d C5 S210 U1", ExtUI::extruder_t::E1);
+        break;
+      #endif
+      #if HAS_HEATED_BED && ENABLED(PIDTEMPBED)
+      case VP_PID_AUTOTUNE_BED:
+        queue.enqueue_now_P(PSTR("M500"));
+        sprintf(buf, "M303 E-1 C5 S70 U1");
+        break;
+      #endif
+      default:
+        break;
+    }
+
+    if(buf[0]) queue.enqueue_one_now(buf);
+
+    #if ENABLED(DGUS_UI_WAITING)
+      sendinfoscreen(PSTR("PID is autotuning"), PSTR("please wait"), NUL_STR, NUL_STR, true, true, true, true);
+      GotoScreen(DGUSLCD_SCREEN_WAITING);
+    #endif
+  }
 #endif
 
 void DGUSScreenVariableHandler::HandleProbeOffsetZChanged(DGUS_VP_Variable &var, void *val_ptr) {

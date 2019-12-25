@@ -550,6 +550,7 @@ void wait_for_confirmation(const bool is_reload/*=false*/, const int8_t max_beep
       #endif
 
       #if ENABLED(EXTENSIBLE_UI)
+        ExtUI::onUserConfirmRequired_P(NULL);
         ExtUI::onUserConfirmRequired_P(PSTR("HeaterTimeout"));
       #endif
 

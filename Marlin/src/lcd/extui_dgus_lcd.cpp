@@ -70,7 +70,9 @@ namespace ExtUI {
   void onPlayTone(const uint16_t frequency, const uint16_t duration) {}
   void onPrintTimerStarted() {}
   void onPrintTimerPaused() {}
-  void onPrintTimerStopped() {}
+  void onPrintTimerStopped() {
+    ScreenHandler.GotoScreen(DGUSLCD_SCREEN_MAIN);
+  }
   void onFilamentRunout(const extruder_t extruder) {}
 
   void onUserConfirmRequired(const char * const msg) {

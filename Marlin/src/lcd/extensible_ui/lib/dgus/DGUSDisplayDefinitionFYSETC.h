@@ -123,8 +123,8 @@ constexpr uint16_t VP_POWER_LOSS_RECOVERY = 0x2180;
 // Fan Control Buttons , switch between "off" and "on"
 constexpr uint16_t VP_FAN_CONTROL = 0x2200;
 constexpr uint16_t VP_FAN1_CONTROL = 0x2202;
-//constexpr uint16_t VP_FAN2_CONTROL = 0x2204;
-//constexpr uint16_t VP_FAN3_CONTROL = 0x2206;
+constexpr uint16_t VP_FAN2_CONTROL = 0x2204;
+constexpr uint16_t VP_FAN3_CONTROL = 0x2206;
 
 // Heater Control Buttons , triged between "cool down" and "heat PLA" state
 constexpr uint16_t VP_E0_CONTROL = 0x2210;
@@ -242,8 +242,8 @@ constexpr uint16_t VP_SD_Print_Filename = 0x32C0;
 // Fan status
 constexpr uint16_t VP_FAN_STATUS = 0x3300;
 constexpr uint16_t VP_FAN1_STATUS = 0x3302;
-//constexpr uint16_t VP_FAN2_STATUS = 0x3304;
-//constexpr uint16_t VP_FAN3_STATUS = 0x3306;
+constexpr uint16_t VP_FAN2_STATUS = 0x3304;
+constexpr uint16_t VP_FAN3_STATUS = 0x3306;
 
 // Heater status
 constexpr uint16_t VP_E0_STATUS = 0x3310;

@@ -2059,7 +2059,7 @@
 //
 // DGUS Touch Display with DWIN OS
 //
-//#define DGUS_LCD
+#define DGUS_LCD
 #if ENABLED(DGUS_LCD)
   // You can only choose one of following UI design
   //#define DGUS_UI_ORIGIN

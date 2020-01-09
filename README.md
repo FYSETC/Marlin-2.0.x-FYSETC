@@ -39,7 +39,7 @@ To build Marlin 2.0 you'll need [Arduino IDE 1.8.8 or newer](https://www.arduino
 
   board|processor|speed|flash|sram|logic|fpu
   ----|---------|-----|-----|----|-----|---
-  [ESP32](https://www.espressif.com/en/products/hardware/esp32/overview)|Tensilica Xtensa LX6|320MHz|---|---|3.3V|---
+  [ESP32](https://www.espressif.com/en/products/hardware/esp32/overview)|Tensilica Xtensa LX6|240MHz|---|---|3.3V|---
 
   #### LPC1768 / LPC1769
 

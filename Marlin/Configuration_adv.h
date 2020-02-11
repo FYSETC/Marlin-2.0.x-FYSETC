@@ -998,7 +998,7 @@
   // as SD_DETECT_PIN in your board's pins definitions.
   // This setting should be disabled unless you are using a push button, pulling the pin to ground.
   // Note: This is always disabled for ULTIPANEL (except ELB_FULL_GRAPHIC_CONTROLLER).
-  #define SD_DETECT_INVERTED
+  //#define SD_DETECT_INVERTED
 
   #define SD_FINISHED_STEPPERRELEASE true          // Disable steppers when SD Print is finished
   #define SD_FINISHED_RELEASECOMMAND "M84 X Y Z E" // You might want to keep the Z enabled so your bed stays in place.
@@ -1303,18 +1303,19 @@
   //#define LCD_4DSYSTEMS_4DLCD_FT843 // 4D Systems 4.3" (480x272)
   //#define LCD_HAOYU_FT800CB         // Haoyu with 4.3" or 5" (480x272)
   //#define LCD_HAOYU_FT810CB         // Haoyu with 5" (800x480)
-  //#define LCD_ALEPHOBJECTS_CLCD_UI  // Aleph Objects Color LCD UI
+  #define LCD_ALEPHOBJECTS_CLCD_UI  // Aleph Objects Color LCD UI
 
   // Correct the resolution if not using the stock TFT panel.
   //#define TOUCH_UI_320x240
   //#define TOUCH_UI_480x272
-  //#define TOUCH_UI_800x480
+  #define TOUCH_UI_800x480
 
   // Mappings for boards with a standard RepRapDiscount Display connector
   //#define AO_EXP1_PINMAP    // AlephObjects CLCD UI EXP1 mapping
   //#define AO_EXP2_PINMAP    // AlephObjects CLCD UI EXP2 mapping
   //#define CR10_TFT_PINMAP   // Rudolph Riedel's CR10 pin mapping
   //#define OTHER_PIN_LAYOUT  // Define pins manually below
+  #define FYSETC_S6_TFT_PINMAP   // FYSETC S6 pin mapping
   #if ENABLED(OTHER_PIN_LAYOUT)
     // The pins for CS and MOD_RESET (PD) must be chosen.
     #define CLCD_MOD_RESET  9

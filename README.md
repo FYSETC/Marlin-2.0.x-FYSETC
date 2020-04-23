@@ -10,6 +10,14 @@
 Additional documentation can be found at the [Marlin Home Page](http://marlinfw.org/).
 Please let us know if Marlin misbehaves in any way. Volunteers are standing by!
 
+## Note
+
+You need to change MOTHERBOARD define to the following option according to your F6 version
+
+F6 v1.3: #define MOTHERBOARD BOARD_FYSETC_F6_13
+
+F6 v1.4: #define MOTHERBOARD BOARD_FYSETC_F6_14 
+
 ## Marlin 2.0
 
 Marlin 2.0 takes this popular RepRap firmware to the next level by adding support for much faster 32-bit and ARM-based boards while improving support for 8-bit AVR boards. Read about Marlin's decision to use a "Hardware Abstraction Layer" below.

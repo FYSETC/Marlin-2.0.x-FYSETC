@@ -118,9 +118,11 @@ namespace ExtUI {
     // whether successful or not.
   }
 
-  void onMeshUpdate(const int8_t xpos, const int8_t ypos, const float zval) {
-    // Called when any mesh points are updated
-  }
+  #if HAS_LEVELING && HAS_MESH
+    void onMeshUpdate(const int8_t xpos, const int8_t ypos, const float zval) {
+      // Called when any mesh points are updated
+    }
+  #endif
 
   #if ENABLED(POWER_LOSS_RECOVERY)
     void onPowerLossResume() {

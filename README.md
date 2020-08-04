@@ -1,3 +1,13 @@
+# IMPORTANT
+
+**If you can't light up the screen , please rotate the both cable 180° and then plug into the socket.**
+
+![](SKR-MINI12864.jpg)
+
+![](SKR-MINI12864_2.jpg)
+
+![](SKR-MINI12864_3.jpg)
+
 # Marlin 3D Printer Firmware
 
 ![GitHub](https://img.shields.io/github/license/marlinfirmware/marlin.svg)

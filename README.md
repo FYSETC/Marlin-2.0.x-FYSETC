@@ -1,6 +1,6 @@
 # IMPORTANT
 
-**If you can't light up the screen , please rotate the both cable 180° and then plug into the socket.**
+**If you can't light up the screen , please rotate the both cable 180° and then plug into the socket.** And this firmware is for SKR 1.3 , if you use other version ,please change the MOTHERBOARD define in ```configuration.h```
 
 ![](SKR-MINI12864.jpg)
 
